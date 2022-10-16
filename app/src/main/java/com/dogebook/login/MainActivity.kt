@@ -6,7 +6,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.app.AppCompatActivity
-import com.dogebook.login.databinding.ActivityMainBinding
+import com.dogebook.databinding.ActivityMainBinding
 import com.dogebook.login.ui.main.SectionsPagerAdapter
 
 class MainActivity : AppCompatActivity() {

@@ -1,12 +1,13 @@
 package com.dogebook.login.ui.main.login.ui
 
+import android.content.Intent
+import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import android.util.Patterns
+import com.dogebook.R
 import com.dogebook.login.ui.main.login.data.LoginRepository
 import com.dogebook.login.ui.main.login.data.Result
-import com.dogebook.login.R
 
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
@@ -18,7 +19,6 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     val loginResult: LiveData<LoginResult> = _loginResult
 
     fun login(username: String, password: String) {
-        // can be launched in a separate asynchronous job
         val result = loginRepository.login(username, password)
 
         if (result is Result.Success) {

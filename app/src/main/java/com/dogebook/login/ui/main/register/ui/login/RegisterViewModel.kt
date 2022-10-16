@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Patterns
+import com.dogebook.R
 import com.dogebook.login.ui.main.register.data.RegisterRepository
 import com.dogebook.login.ui.main.register.data.Result
-import com.dogebook.login.R
 
 
 class RegisterViewModel(private val loginRepository: RegisterRepository) : ViewModel() {

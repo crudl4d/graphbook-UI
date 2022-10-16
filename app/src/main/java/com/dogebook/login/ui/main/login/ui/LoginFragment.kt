@@ -1,5 +1,6 @@
 package com.dogebook.login.ui.main.login.ui
 
+import android.content.Intent
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.annotation.StringRes
@@ -12,8 +13,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
-import com.dogebook.login.R
-import com.dogebook.login.databinding.FragmentLoginBinding
+import com.dogebook.R
+import com.dogebook.databinding.FragmentLoginBinding
+import com.dogebook.feed.FeedActivity
 
 
 class LoginFragment : Fragment() {
@@ -70,6 +72,8 @@ class LoginFragment : Fragment() {
                 loginResult.success?.let {
                     updateUiWithUser(it)
                 }
+                val intent = Intent(super.getContext(), FeedActivity::class.java)
+                startActivity(intent)
             })
 
         val afterTextChangedListener = object : TextWatcher {

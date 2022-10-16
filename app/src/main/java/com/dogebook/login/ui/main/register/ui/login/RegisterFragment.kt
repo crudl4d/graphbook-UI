@@ -12,8 +12,8 @@ import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.dogebook.login.R
-import com.dogebook.login.databinding.FragmentRegisterBinding
+import com.dogebook.R
+import com.dogebook.databinding.FragmentRegisterBinding
 
 class RegisterFragment : Fragment() {
 
