@@ -4,12 +4,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Patterns
+import androidx.lifecycle.viewModelScope
 import com.dogebook.R
 import com.dogebook.login.ui.main.register.data.RegisterRepository
 import com.dogebook.login.ui.main.register.data.Result
+import com.dogebook.login.ui.main.register.data.model.LoggedInUser
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
-class RegisterViewModel(private val loginRepository: RegisterRepository) : ViewModel() {
+class RegisterViewModel(val loginRepository: RegisterRepository) : ViewModel() {
 
     private val _loginForm = MutableLiveData<RegisterFormState>()
     val registerFormState: LiveData<RegisterFormState> = _loginForm
@@ -19,11 +23,13 @@ class RegisterViewModel(private val loginRepository: RegisterRepository) : ViewM
 
     fun login(username: String, password: String) {
         // can be launched in a separate asynchronous job
-        val result = loginRepository.login(username, password)
-
+        var result: Result<LoggedInUser>? = null
+        viewModelScope.launch(Dispatchers.IO) {
+            result = loginRepository.login(username, password)
+        }
         if (result is Result.Success) {
             _loginResult.value =
-                RegisterResult(success = RegisteredUserView(displayName = result.data.displayName))
+                RegisterResult(success = RegisteredUserView(displayName = (result as Result.Success<LoggedInUser>).data.displayName))
         } else {
             _loginResult.value = RegisterResult(error = R.string.login_failed)
         }

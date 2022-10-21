@@ -1,16 +1,28 @@
 package com.dogebook.feed.ui.main.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.dogebook.Dogebook
 import com.dogebook.R
+import com.google.gson.Gson
+import okhttp3.Call
+import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import java.util.concurrent.Executors
 
 class FeedFragment : Fragment() {
+
+    private val client: OkHttpClient = OkHttpClient()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,10 +34,7 @@ class FeedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         populateData()
-        initAdapter()
-        initScrollListener()
     }
 
     var recyclerView: RecyclerView? = null
@@ -35,10 +44,37 @@ class FeedFragment : Fragment() {
     var isLoading = false
 
     private fun populateData() {
-        var i = 0
-        while (i < 10) {
-            rowsArrayList.add("Item $i")
-            i++
+        fetchPosts()
+    }
+
+    private fun fetchPosts() {
+        val executor = Executors.newSingleThreadExecutor()
+        val handler = Handler(Looper.getMainLooper())
+        executor.execute {
+            var response: Response? = null
+            val url = ("${Dogebook.url}/posts/").toHttpUrl().newBuilder()
+                .build().toString()
+            val request: Request = Request.Builder()
+                .url(url)
+                .addHeader(
+                    "Authorization",
+                    requireContext().getSharedPreferences(
+                        R.string.preferences.toString(),
+                        Context.MODE_PRIVATE
+                    )
+                        .getString("TOKEN", "").toString()
+                )
+                .build()
+            val call: Call = client.newCall(request)
+            response = call.execute()
+            val posts = Gson().fromJson(response.body?.string(), Array<Post>::class.java)
+            handler.post {
+                for (post in posts) {
+                    rowsArrayList.add(post.content)
+                }
+                initAdapter()
+                initScrollListener()
+            }
         }
     }
 
@@ -50,9 +86,6 @@ class FeedFragment : Fragment() {
 
     private fun initScrollListener() {
         recyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-            }
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)

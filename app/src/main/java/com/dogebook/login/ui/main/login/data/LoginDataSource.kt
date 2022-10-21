@@ -1,19 +1,33 @@
 package com.dogebook.login.ui.main.login.data
 
+import com.dogebook.Dogebook
 import com.dogebook.login.ui.main.login.data.model.LoggedInUser
+import okhttp3.*
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import java.io.IOException
-import java.util.*
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
  */
 class LoginDataSource {
 
-    fun login(username: String, password: String): Result<LoggedInUser> {
+    private val client: OkHttpClient = OkHttpClient()
+
+    fun login(credentials: String): Result<LoggedInUser> {
         try {
-            // TODO: handle loggedInUser authentication
-            val fakeUser = LoggedInUser(UUID.randomUUID().toString(), "Jane Doe")
-            return Result.Success(fakeUser)
+            val url = ("${Dogebook.url}/users/login/").toHttpUrl().newBuilder()
+                .build().toString()
+            val request: Request = Request.Builder()
+                .post(FormBody.Builder().build())
+                .url(url)
+                .addHeader("Authorization", credentials)
+                .build()
+            val call: Call = client.newCall(request)
+            val response: Response = call.execute()
+            val user = LoggedInUser(
+                response.header("id", "")!!, response.header("name", "")!!
+            )
+            return Result.Success(user)
         } catch (e: Throwable) {
             return Result.Error(IOException("Error logging in", e))
         }
