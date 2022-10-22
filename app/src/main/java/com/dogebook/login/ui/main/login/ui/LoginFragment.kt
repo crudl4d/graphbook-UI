@@ -1,5 +1,6 @@
 package com.dogebook.login.ui.main.login.ui
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -13,6 +14,7 @@ import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.dogebook.Dogebook
 import com.dogebook.R
 import com.dogebook.databinding.FragmentLoginBinding
 import com.dogebook.feed.FeedActivity
@@ -39,9 +41,11 @@ class LoginFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        if (Dogebook.getToken(requireContext()).isNotBlank()) {
+            redirectToFeed()
+        }
         super.onViewCreated(view, savedInstanceState)
-        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())
-            .get(LoginViewModel::class.java)
+        loginViewModel = ViewModelProvider(this, LoginViewModelFactory())[LoginViewModel::class.java]
 
         val usernameEditText = binding.username
         val passwordEditText = binding.password
@@ -71,9 +75,8 @@ class LoginFragment : Fragment() {
                 }
                 loginResult.success?.let {
                     updateUiWithUser(it)
+                    redirectToFeed()
                 }
-                val intent = Intent(super.getContext(), FeedActivity::class.java)
-                startActivity(intent)
             })
         val afterTextChangedListener = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
@@ -112,6 +115,11 @@ class LoginFragment : Fragment() {
                 requireContext()
             )
         }
+    }
+
+    private fun redirectToFeed() {
+        val intent = Intent(super.getContext(), FeedActivity::class.java)
+        startActivity(intent)
     }
 
     private fun updateUiWithUser(model: LoggedInUserView) {

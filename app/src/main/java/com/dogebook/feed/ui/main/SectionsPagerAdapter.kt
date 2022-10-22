@@ -8,7 +8,7 @@ import com.dogebook.R
 import com.dogebook.feed.ui.main.fragments.FeedFragment
 
 private val TAB_TITLES = arrayOf(
-    R.string.tab_text_1,
+    R.string.feed,
     R.string.tab_text_2
 )
 

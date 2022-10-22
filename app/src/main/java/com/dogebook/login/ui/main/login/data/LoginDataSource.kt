@@ -11,8 +11,6 @@ import java.io.IOException
  */
 class LoginDataSource {
 
-    private val client: OkHttpClient = OkHttpClient()
-
     fun login(credentials: String): Result<LoggedInUser> {
         try {
             val url = ("${Dogebook.url}/users/login/").toHttpUrl().newBuilder()
@@ -22,7 +20,7 @@ class LoginDataSource {
                 .url(url)
                 .addHeader("Authorization", credentials)
                 .build()
-            val call: Call = client.newCall(request)
+            val call: Call = OkHttpClient().newCall(request)
             val response: Response = call.execute()
             val user = LoggedInUser(
                 response.header("id", "")!!, response.header("name", "")!!
@@ -31,9 +29,5 @@ class LoginDataSource {
         } catch (e: Throwable) {
             return Result.Error(IOException("Error logging in", e))
         }
-    }
-
-    fun logout() {
-        // TODO: revoke authentication
     }
 }

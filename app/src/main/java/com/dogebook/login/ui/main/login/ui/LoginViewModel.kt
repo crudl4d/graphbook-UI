@@ -29,15 +29,15 @@ class LoginViewModel(val loginRepository: LoginRepository) : ViewModel() {
         with(sharedPref.edit()) {
             putString("TOKEN", credentials)
         }.commit()
-        var result: Result<LoggedInUser>? = null
+        var result: Result<LoggedInUser>?
         viewModelScope.launch(Dispatchers.IO) {
             result = loginRepository.login(credentials)
-        }
-        if (result is Result.Success) {
-            _loginResult.value =
-                LoginResult(success = LoggedInUserView(displayName = (result as Result.Success<LoggedInUser>).data.displayName))
-        } else {
-            _loginResult.value = LoginResult(error = R.string.login_failed)
+            if (result is Result.Success) {
+                _loginResult.value =
+                    LoginResult(success = LoggedInUserView(displayName = (result as Result.Success<LoggedInUser>).data.displayName))
+            } else {
+                _loginResult.value = LoginResult(error = R.string.login_failed)
+            }
         }
     }
 
@@ -51,7 +51,6 @@ class LoginViewModel(val loginRepository: LoginRepository) : ViewModel() {
         }
     }
 
-    // A placeholder username validation check
     private fun isUserNameValid(username: String): Boolean {
         return if (username.contains("@")) {
             Patterns.EMAIL_ADDRESS.matcher(username).matches()
@@ -60,7 +59,6 @@ class LoginViewModel(val loginRepository: LoginRepository) : ViewModel() {
         }
     }
 
-    // A placeholder password validation check
     private fun isPasswordValid(password: String): Boolean {
         return password.length > 5
     }

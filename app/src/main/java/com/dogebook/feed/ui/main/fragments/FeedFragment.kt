@@ -7,6 +7,7 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,8 +22,6 @@ import okhttp3.Response
 import java.util.concurrent.Executors
 
 class FeedFragment : Fragment() {
-
-    private val client: OkHttpClient = OkHttpClient()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,9 +38,10 @@ class FeedFragment : Fragment() {
 
     var recyclerView: RecyclerView? = null
     var recyclerViewAdapter: RecyclerViewAdapter? = null
-    var rowsArrayList: ArrayList<String?> = ArrayList()
+    var rowsArrayList: ArrayList<Post?> = ArrayList()
 
     var isLoading = false
+    var page = 0
 
     private fun populateData() {
         fetchPosts()
@@ -51,26 +51,12 @@ class FeedFragment : Fragment() {
         val executor = Executors.newSingleThreadExecutor()
         val handler = Handler(Looper.getMainLooper())
         executor.execute {
-            var response: Response? = null
-            val url = ("${Dogebook.url}/posts/").toHttpUrl().newBuilder()
-                .build().toString()
-            val request: Request = Request.Builder()
-                .url(url)
-                .addHeader(
-                    "Authorization",
-                    requireContext().getSharedPreferences(
-                        R.string.preferences.toString(),
-                        Context.MODE_PRIVATE
-                    )
-                        .getString("TOKEN", "").toString()
-                )
-                .build()
-            val call: Call = client.newCall(request)
-            response = call.execute()
+            val response = Dogebook.executeRequest(requireContext(), "/posts?page=0", Dogebook.METHOD.GET, null)
             val posts = Gson().fromJson(response.body?.string(), Array<Post>::class.java)
+            page++
             handler.post {
                 for (post in posts) {
-                    rowsArrayList.add(post.content)
+                    rowsArrayList.add(post)
                 }
                 initAdapter()
                 initScrollListener()
@@ -80,7 +66,7 @@ class FeedFragment : Fragment() {
 
     private fun initAdapter() {
         recyclerView = requireView().findViewById(R.id.recyclerView)
-        recyclerViewAdapter = RecyclerViewAdapter(rowsArrayList)
+        recyclerViewAdapter = RecyclerViewAdapter(rowsArrayList, requireContext())
         recyclerView!!.adapter = recyclerViewAdapter
     }
 
@@ -102,21 +88,26 @@ class FeedFragment : Fragment() {
     }
 
     private fun loadMore() {
-        rowsArrayList.add(null)
-        recyclerViewAdapter!!.notifyItemInserted(rowsArrayList.size - 1)
-        val handler = Handler()
-        handler.postDelayed(Runnable {
-            rowsArrayList.removeAt(rowsArrayList.size - 1)
-            val scrollPosition: Int = rowsArrayList.size
-            recyclerViewAdapter!!.notifyItemRemoved(scrollPosition)
-            var currentSize = scrollPosition
-            val nextLimit = currentSize + 10
-            while (currentSize - 1 < nextLimit) {
-                rowsArrayList.add("Item $currentSize")
-                currentSize++
+        recyclerView?.post {
+            val executor = Executors.newSingleThreadExecutor()
+            val handler = Handler(Looper.getMainLooper())
+            executor.execute {
+                val response = Dogebook.executeRequest(
+                    requireContext(),
+                    "/posts?page=$page",
+                    Dogebook.METHOD.GET,
+                    null
+                )
+                val posts = Gson().fromJson(response.body?.string(), Array<Post>::class.java)
+                handler.post {
+                    page++
+                    for (post in posts) {
+                        rowsArrayList.add(post)
+                    }
+                    recyclerViewAdapter?.notifyDataSetChanged()
+                }
             }
-            recyclerViewAdapter!!.notifyDataSetChanged()
             isLoading = false
-        }, 2000)
+        }
     }
 }
