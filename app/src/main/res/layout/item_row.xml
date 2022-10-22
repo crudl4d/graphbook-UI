@@ -16,6 +16,7 @@
             android:id="@+id/author"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textFontWeight="2"
             android:textSize="16sp" />
 
@@ -26,11 +27,27 @@
             android:padding="16dp"
             android:text="Item X" />
 
-        <TextView
-            android:id="@+id/likeCount"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/likes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="9"
+                android:text="@string/likes"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/likeCount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="TextView"
+                android:textColor="@color/black" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
