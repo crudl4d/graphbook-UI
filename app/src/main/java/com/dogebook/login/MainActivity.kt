@@ -1,9 +1,12 @@
 package com.dogebook.login
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
+import com.dogebook.Dogebook
 import com.dogebook.databinding.ActivityMainBinding
+import com.dogebook.feed.FeedActivity
 import com.dogebook.login.ui.main.SectionsPagerAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -15,7 +18,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        if (Dogebook.getToken(applicationContext).isNotBlank()) {
+            val intent = Intent(applicationContext, FeedActivity::class.java)
+            startActivity(intent)
+        }
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

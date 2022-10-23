@@ -9,10 +9,7 @@ import com.dogebook.R
 import com.dogebook.databinding.ActivityFeedBinding
 import com.dogebook.feed.ui.main.SectionsPagerAdapter
 import com.dogebook.login.MainActivity
-import com.dogebook.login.ui.main.login.data.LoginRepository
-import com.dogebook.login.ui.main.login.ui.LoginFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 
 class FeedActivity : AppCompatActivity() {

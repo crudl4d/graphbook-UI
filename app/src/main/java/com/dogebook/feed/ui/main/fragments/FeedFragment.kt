@@ -1,28 +1,24 @@
 package com.dogebook.feed.ui.main.fragments
 
-import android.content.Context
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.get
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dogebook.Dogebook
 import com.dogebook.R
 import com.google.gson.Gson
-import okhttp3.Call
-import okhttp3.HttpUrl.Companion.toHttpUrl
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
 import java.util.concurrent.Executors
 
-class FeedFragment : Fragment() {
 
+class FeedFragment : Fragment() {
+    lateinit var loadingPB: ProgressBar
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -33,6 +29,9 @@ class FeedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        loadingPB = requireView().findViewById(R.id.progressBar)
+        loadingPB.visibility = View.VISIBLE
         populateData()
     }
 
@@ -58,6 +57,7 @@ class FeedFragment : Fragment() {
                 for (post in posts) {
                     rowsArrayList.add(post)
                 }
+                loadingPB.visibility = View.GONE
                 initAdapter()
                 initScrollListener()
             }

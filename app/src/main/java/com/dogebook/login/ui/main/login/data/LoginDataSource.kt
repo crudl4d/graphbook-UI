@@ -22,6 +22,7 @@ class LoginDataSource {
                 .build()
             val call: Call = OkHttpClient().newCall(request)
             val response: Response = call.execute()
+            if (!response.isSuccessful) return Result.Error(IOException("Error logging in"))
             val user = LoggedInUser(
                 response.header("id", "")!!, response.header("name", "")!!
             )

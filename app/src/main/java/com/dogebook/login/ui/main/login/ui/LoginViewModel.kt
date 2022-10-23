@@ -29,14 +29,14 @@ class LoginViewModel(val loginRepository: LoginRepository) : ViewModel() {
         with(sharedPref.edit()) {
             putString("TOKEN", credentials)
         }.commit()
-        var result: Result<LoggedInUser>?
+        var result: Result<LoggedInUser>? = Result.Success(LoggedInUser("",""))
         viewModelScope.launch(Dispatchers.IO) {
             result = loginRepository.login(credentials)
             if (result is Result.Success) {
-                _loginResult.value =
-                    LoginResult(success = LoggedInUserView(displayName = (result as Result.Success<LoggedInUser>).data.displayName))
+                _loginResult.postValue(
+                    LoginResult(success = LoggedInUserView(displayName = (result as Result.Success<LoggedInUser>).data.displayName)))
             } else {
-                _loginResult.value = LoginResult(error = R.string.login_failed)
+                _loginResult.postValue(LoginResult(error = R.string.login_failed))
             }
         }
     }
