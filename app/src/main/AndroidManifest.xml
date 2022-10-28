@@ -33,7 +33,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".feed.FeedActivity"
+            android:name=".feed.MainActivity"
             android:exported="false"
             android:label="@string/title_activity_main2"
             android:theme="@style/Theme.Dogebook2.NoActionBar">
@@ -42,7 +42,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".login.MainActivity"
+            android:name=".login.InitialActivity"
             android:exported="true"
             android:theme="@style/Theme.Dogebook2.NoActionBar">
             <intent-filter>

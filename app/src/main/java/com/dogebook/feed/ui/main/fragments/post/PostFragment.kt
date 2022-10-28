@@ -4,14 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.findViewTreeLifecycleOwner
-import androidx.navigation.fragment.findNavController
 import com.dogebook.databinding.FragmentPostBinding
-import com.dogebook.feed.FeedActivity
+import com.dogebook.feed.MainActivity
 
 class PostFragment : Fragment() {
 
@@ -28,7 +23,7 @@ class PostFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.button.setOnClickListener {
-            (requireActivity() as FeedActivity).showTabs()
+            (requireActivity() as MainActivity).showTabs()
         }
         super.onViewCreated(view, savedInstanceState)
     }

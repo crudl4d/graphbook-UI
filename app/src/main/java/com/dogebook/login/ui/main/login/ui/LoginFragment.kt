@@ -1,6 +1,5 @@
 package com.dogebook.login.ui.main.login.ui
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -14,10 +13,9 @@ import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.dogebook.Dogebook
 import com.dogebook.R
 import com.dogebook.databinding.FragmentLoginBinding
-import com.dogebook.feed.FeedActivity
+import com.dogebook.feed.MainActivity
 
 
 class LoginFragment : Fragment() {
@@ -115,7 +113,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun redirectToFeed() {
-        val intent = Intent(super.getContext(), FeedActivity::class.java)
+        val intent = Intent(super.getContext(), MainActivity::class.java)
         startActivity(intent)
     }
 
