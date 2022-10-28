@@ -43,7 +43,7 @@ class RecyclerViewAdapter(var mItemList: List<Post?>?, var ctx: Context) :
     }
 
     override fun getItemCount(): Int {
-        return if (mItemList == null) 0 else mItemList!!.size
+        return mItemList?.size ?: 0
     }
 
     /**
@@ -53,7 +53,7 @@ class RecyclerViewAdapter(var mItemList: List<Post?>?, var ctx: Context) :
      * @return
      */
     override fun getItemViewType(position: Int): Int {
-        return if (mItemList!![position] == null) VIEW_TYPE_LOADING else VIEW_TYPE_ITEM
+        return if (mItemList?.get(position) == null) VIEW_TYPE_LOADING else VIEW_TYPE_ITEM
     }
 
     private inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

@@ -77,13 +77,13 @@ class FeedFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        recyclerView = requireView().findViewById(R.id.recyclerView)
+        recyclerView = view?.findViewById(R.id.recyclerView)
         recyclerViewAdapter = RecyclerViewAdapter(rowsArrayList, requireContext())
         recyclerView?.adapter = recyclerViewAdapter
     }
 
     private fun initScrollListener() {
-        recyclerView!!.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        recyclerView?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
