@@ -1,39 +1,38 @@
-package com.dogebook.feed.ui.main.fragments
+package com.dogebook.feed.ui.main.fragments.feed
 
-import android.graphics.drawable.Drawable
+import android.app.AlertDialog
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.InputType
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ProgressBar
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dogebook.Dogebook
 import com.dogebook.R
+import com.dogebook.databinding.FragmentFeedBinding
+import com.dogebook.feed.FeedActivity
+import com.dogebook.feed.ui.main.fragments.RecyclerViewAdapter
 import com.google.gson.Gson
 import java.util.concurrent.Executors
 
 
 class FeedFragment : Fragment() {
-    lateinit var loadingPB: ProgressBar
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_feed, container, false)
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        loadingPB = requireView().findViewById(R.id.progressBar)
-        loadingPB.visibility = View.VISIBLE
-        populateData()
-    }
+    private var _binding: FragmentFeedBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var loadingPB: ProgressBar
 
     var recyclerView: RecyclerView? = null
     var recyclerViewAdapter: RecyclerViewAdapter? = null
@@ -41,6 +40,27 @@ class FeedFragment : Fragment() {
 
     var isLoading = false
     var page = 0
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentFeedBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.writePost.setOnClickListener {
+            (requireActivity() as FeedActivity).hideTabs()
+            findNavController().navigate(R.id.action_feedFragment2_to_postFragment)
+        }
+
+        loadingPB = requireView().findViewById(R.id.progressBar)
+        loadingPB.visibility = View.VISIBLE
+        populateData()
+    }
 
     private fun populateData() {
         fetchPosts()
@@ -67,7 +87,7 @@ class FeedFragment : Fragment() {
     private fun initAdapter() {
         recyclerView = requireView().findViewById(R.id.recyclerView)
         recyclerViewAdapter = RecyclerViewAdapter(rowsArrayList, requireContext())
-        recyclerView!!.adapter = recyclerViewAdapter
+        recyclerView?.adapter = recyclerViewAdapter
     }
 
     private fun initScrollListener() {
@@ -109,5 +129,10 @@ class FeedFragment : Fragment() {
             }
             isLoading = false
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

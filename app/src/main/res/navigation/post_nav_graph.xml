@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/post_nav_graph"
+    app:startDestination="@id/feedFragment2">
+    <fragment
+        android:id="@+id/feedFragment2"
+        android:name="com.dogebook.feed.ui.main.fragments.feed.FeedFragment"
+        android:label="fragment_feed"
+        tools:layout="@layout/fragment_feed" >
+        <action
+            android:id="@+id/action_feedFragment2_to_postFragment"
+            app:destination="@id/postFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/postFragment"
+        android:name="com.dogebook.feed.ui.main.fragments.post.PostFragment"
+        android:label="fragment_post"
+        tools:layout="@layout/fragment_post" >
+        <argument
+            android:name="posts"
+            app:argType="reference" />
+    </fragment>
+</navigation>

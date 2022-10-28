@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dogebook.Dogebook
 import com.dogebook.R
+import com.dogebook.feed.ui.main.fragments.feed.Post
 import java.util.concurrent.Executors
 
 
@@ -108,7 +109,7 @@ class RecyclerViewAdapter(var mItemList: List<Post?>?, var ctx: Context) :
             }
         }
         viewHolder.commentButton.setOnClickListener {
-            //todo launch comments
+            //ctx.startActivity(Intent(this.ctx, Comments::class.java))
         }
     }
 }

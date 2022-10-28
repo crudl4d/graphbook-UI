@@ -1,4 +1,4 @@
-package com.dogebook.feed.ui.main.fragments
+package com.dogebook.feed.ui.main.fragments.feed
 
 data class Author(
     val firstName: String,
