@@ -1,4 +1,4 @@
-package com.dogebook.feed.fragments
+package com.dogebook.feed.fragments.feed.comments
 
 import android.content.Context
 import android.os.Handler
@@ -9,20 +9,19 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.dogebook.Dogebook
 import com.dogebook.R
-import com.dogebook.feed.fragments.feed.Post
 import java.util.concurrent.Executors
 
-
-class RecyclerViewAdapter(
-    private val mItemList: List<Post?>?,
+/**
+ * [RecyclerView.Adapter] that can display a [PlaceholderItem].
+ * TODO: Replace the implementation with code for your data type.
+ */
+class CommentRecyclerViewAdapter(
     private val ctx: Context,
-    private val navController: NavController
-) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val mItemList: List<Comment?>?
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val VIEW_TYPE_ITEM = 0
     private val VIEW_TYPE_LOADING = 1
@@ -64,14 +63,12 @@ class RecyclerViewAdapter(
     private inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var tvItem: TextView
         var likeButton: Button
-        var commentButton: Button
         var likesCount: TextView
         var author: TextView
 
         init {
             tvItem = itemView.findViewById(R.id.tvItem)
             likeButton = itemView.findViewById(R.id.like_button)
-            commentButton = itemView.findViewById(R.id.comments)
             likesCount = itemView.findViewById(R.id.likeCount)
             author = itemView.findViewById(R.id.author)
         }
@@ -90,7 +87,7 @@ class RecyclerViewAdapter(
     }
 
     private fun populateItemRows(viewHolder: ItemViewHolder, position: Int) {
-        val item: Post? = mItemList?.get(position)
+        val item: Comment? = mItemList?.get(position)
         viewHolder.tvItem.text = item?.content
         viewHolder.likesCount.text = item?.likes.toString()
         viewHolder.author.text = item?.author.toString()
@@ -113,9 +110,6 @@ class RecyclerViewAdapter(
                 }
             }
         }
-        viewHolder.commentButton.setOnClickListener {
-            navController.navigate(R.id.action_feedFragment_to_commentsFragment)
-            //ctx.startActivity(Intent(this.ctx, Comments::class.java))
-        }
     }
+
 }

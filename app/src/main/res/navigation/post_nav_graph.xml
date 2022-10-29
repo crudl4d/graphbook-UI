@@ -15,6 +15,9 @@
         <action
             android:id="@+id/action_feedFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_feedFragment_to_commentsFragment"
+            app:destination="@id/commentsFragment" />
     </fragment>
     <fragment
         android:id="@+id/postFragment"
@@ -30,4 +33,9 @@
             android:id="@+id/action_profileFragment_to_feedFragment"
             app:destination="@id/feedFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/commentsFragment"
+        android:name="com.dogebook.feed.fragments.feed.comments.CommentsFragment"
+        android:label="fragment_comments_list"
+        tools:layout="@layout/fragment_comments" />
 </navigation>

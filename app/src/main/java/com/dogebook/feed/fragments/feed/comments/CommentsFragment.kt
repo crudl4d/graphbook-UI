@@ -1,4 +1,4 @@
-package com.dogebook.feed.fragments.feed
+package com.dogebook.feed.fragments.feed.comments
 
 import android.os.Bundle
 import android.os.Handler
@@ -13,41 +13,38 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dogebook.Dogebook
 import com.dogebook.R
-import com.dogebook.databinding.FragmentFeedBinding
-import com.dogebook.feed.MainActivity
-import com.dogebook.feed.fragments.RecyclerViewAdapter
+import com.dogebook.databinding.FragmentCommentsBinding
 import com.google.gson.Gson
 import java.util.concurrent.Executors
 
+/**
+ * A fragment representing a list of Items.
+ */
+class CommentsFragment : Fragment() {
 
-class FeedFragment : Fragment() {
-
-    private var _binding: FragmentFeedBinding? = null
+    private var _binding: FragmentCommentsBinding? = null
     private val binding get() = _binding!!
     private lateinit var loadingPB: ProgressBar
 
     private var recyclerView: RecyclerView? = null
-    private var recyclerViewAdapter: RecyclerViewAdapter? = null
-    private var rowsArrayList: ArrayList<Post?> = ArrayList()
+    private var recyclerViewAdapter: CommentRecyclerViewAdapter? = null
+    private var rowsArrayList: ArrayList<Comment?> = ArrayList()
 
     private var isLoading = false
     private var page = 0
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentFeedBinding.inflate(inflater, container, false)
+        _binding = FragmentCommentsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.writePost.setOnClickListener {
-            (requireActivity() as MainActivity).hideTabs()
-            findNavController().navigate(R.id.action_feedFragment_to_postFragment)
-        }
 
         loadingPB = requireView().findViewById(R.id.progressBar)
         loadingPB.visibility = View.VISIBLE
@@ -62,12 +59,12 @@ class FeedFragment : Fragment() {
         val executor = Executors.newSingleThreadExecutor()
         val handler = Handler(Looper.getMainLooper())
         executor.execute {
-            val response = Dogebook.executeRequest(requireContext(), "/posts?page=0", Dogebook.METHOD.GET, null)
-            val posts = Gson().fromJson(response.body?.string(), Array<Post>::class.java)
+            val response = Dogebook.executeRequest(requireContext(), "/comments?page=0", Dogebook.METHOD.GET, null)
+            val comments = Gson().fromJson(response.body?.string(), Array<Comment>::class.java)
             page++
             handler.post {
-                for (post in posts) {
-                    rowsArrayList.add(post)
+                for (comment in comments) {
+                    rowsArrayList.add(comment)
                 }
                 loadingPB.visibility = View.GONE
                 initAdapter()
@@ -77,8 +74,8 @@ class FeedFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        recyclerView = view?.findViewById(R.id.recyclerView)
-        recyclerViewAdapter = RecyclerViewAdapter(rowsArrayList, requireContext(), findNavController())
+        recyclerView = binding.recyclerView
+        recyclerViewAdapter = CommentRecyclerViewAdapter(requireContext(), rowsArrayList)
         recyclerView?.adapter = recyclerViewAdapter
     }
 
@@ -106,15 +103,15 @@ class FeedFragment : Fragment() {
             executor.execute {
                 val response = Dogebook.executeRequest(
                     requireContext(),
-                    "/posts?page=$page",
+                    "/comments?page=$page",
                     Dogebook.METHOD.GET,
                     null
                 )
-                val posts = Gson().fromJson(response.body?.string(), Array<Post>::class.java)
+                val comments = Gson().fromJson(response.body?.string(), Array<Comment>::class.java)
                 handler.post {
                     page++
-                    for (post in posts) {
-                        rowsArrayList.add(post)
+                    for (comment in comments) {
+                        rowsArrayList.add(comment)
                     }
                     recyclerViewAdapter?.notifyDataSetChanged()
                 }
@@ -126,5 +123,4 @@ class FeedFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-}
+    }}
