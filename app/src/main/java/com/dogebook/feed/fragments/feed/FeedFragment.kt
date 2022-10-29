@@ -1,4 +1,4 @@
-package com.dogebook.feed.ui.main.fragments.feed
+package com.dogebook.feed.fragments.feed
 
 import android.os.Bundle
 import android.os.Handler
@@ -15,7 +15,7 @@ import com.dogebook.Dogebook
 import com.dogebook.R
 import com.dogebook.databinding.FragmentFeedBinding
 import com.dogebook.feed.MainActivity
-import com.dogebook.feed.ui.main.fragments.RecyclerViewAdapter
+import com.dogebook.feed.fragments.RecyclerViewAdapter
 import com.google.gson.Gson
 import java.util.concurrent.Executors
 
@@ -102,7 +102,7 @@ class FeedFragment : Fragment() {
     private fun loadMore() {
         recyclerView?.post {
             val executor = Executors.newSingleThreadExecutor()
-            val handler = Handler(Looper.getMainLooper())
+            val handler = Handler()
             executor.execute {
                 val response = Dogebook.executeRequest(
                     requireContext(),

@@ -1,6 +1,6 @@
-package com.dogebook.feed.ui.main.fragments.feed
+package com.dogebook.feed.fragments.profile
 
-data class Author(
+data class User(
     val firstName: String,
     val surname: String,
 )

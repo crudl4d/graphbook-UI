@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/pic"
     android:orientation="vertical"
-    tools:context=".feed.ui.main.fragments.feed.FeedFragment">
+    tools:context=".feed.fragments.feed.FeedFragment">
 
     <Button
         android:id="@+id/writePost"

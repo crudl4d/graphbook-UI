@@ -1,4 +1,4 @@
-package com.dogebook.feed.ui.main.fragments
+package com.dogebook.feed.fragments
 
 import android.content.Context
 import android.os.Handler
@@ -12,7 +12,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.dogebook.Dogebook
 import com.dogebook.R
-import com.dogebook.feed.ui.main.fragments.feed.Post
+import com.dogebook.feed.fragments.feed.Post
 import java.util.concurrent.Executors
 
 

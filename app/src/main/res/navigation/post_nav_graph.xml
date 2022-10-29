@@ -6,7 +6,7 @@
     app:startDestination="@id/feedFragment">
     <fragment
         android:id="@+id/feedFragment"
-        android:name="com.dogebook.feed.ui.main.fragments.feed.FeedFragment"
+        android:name="com.dogebook.feed.fragments.feed.FeedFragment"
         android:label="@string/feed"
         tools:layout="@layout/fragment_feed" >
         <action
@@ -18,12 +18,12 @@
     </fragment>
     <fragment
         android:id="@+id/postFragment"
-        android:name="com.dogebook.feed.ui.main.fragments.post.PostFragment"
+        android:name="com.dogebook.feed.fragments.post.PostFragment"
         android:label="@string/post"
         tools:layout="@layout/fragment_post" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.dogebook.feed.ui.main.fragments.profile.ProfileFragment"
+        android:name="com.dogebook.feed.fragments.profile.ProfileFragment"
         android:label="@string/profile"
         tools:layout="@layout/fragment_profile" >
         <action

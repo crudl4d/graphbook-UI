@@ -8,7 +8,6 @@ import okhttp3.HttpUrl.Companion.toHttpUrl
 class Dogebook : Application() {
     companion object {
         lateinit var url: String
-        lateinit var context: Context
 
         fun getToken(context: Context): String {
             return context.getSharedPreferences(R.string.preferences.toString(), Context.MODE_PRIVATE).getString("TOKEN", "").toString()
@@ -43,6 +42,5 @@ class Dogebook : Application() {
     override fun onCreate() {
         super.onCreate()
         url = getString(R.string.host_url)
-        context = this
     }
 }
