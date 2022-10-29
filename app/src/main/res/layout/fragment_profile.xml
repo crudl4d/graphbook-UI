@@ -16,4 +16,5 @@
             android:layout_height="wrap_content"
             android:text="TextView" />
     </TableRow>
+    <include layout="@layout/progress_bar"/>
 </TableLayout>

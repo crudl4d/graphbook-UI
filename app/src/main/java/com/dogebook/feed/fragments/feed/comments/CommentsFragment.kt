@@ -8,12 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dogebook.Dogebook
-import com.dogebook.R
 import com.dogebook.databinding.FragmentCommentsBinding
+import com.dogebook.feed.MainActivity
 import com.google.gson.Gson
 import java.util.concurrent.Executors
 
@@ -45,17 +44,14 @@ class CommentsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        loadingPB = requireView().findViewById(R.id.progressBar)
-        loadingPB.visibility = View.VISIBLE
         populateData()
     }
 
     private fun populateData() {
-        fetchPosts()
+        fetchComments()
     }
 
-    private fun fetchPosts() {
+    private fun fetchComments() {
         val executor = Executors.newSingleThreadExecutor()
         val handler = Handler(Looper.getMainLooper())
         executor.execute {
@@ -66,7 +62,7 @@ class CommentsFragment : Fragment() {
                 for (comment in comments) {
                     rowsArrayList.add(comment)
                 }
-                loadingPB.visibility = View.GONE
+                (requireActivity() as MainActivity).hideProgressBar()
                 initAdapter()
                 initScrollListener()
             }

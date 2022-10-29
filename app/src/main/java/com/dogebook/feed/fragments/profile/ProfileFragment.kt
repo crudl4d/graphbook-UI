@@ -5,8 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import com.dogebook.Dogebook
+import com.dogebook.R
 import com.dogebook.databinding.FragmentProfileBinding
+import com.dogebook.feed.MainActivity
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,6 +39,7 @@ class ProfileFragment : Fragment() {
             val response = Dogebook.executeRequest(requireContext(),"/me", Dogebook.METHOD.GET, null)
             val user = Gson().fromJson(response.body?.string(), User::class.java)
             binding.name.text = user.toString()
+            (requireActivity() as MainActivity).hideProgressBar()
             }
         }
     }

@@ -3,6 +3,8 @@ package com.dogebook.feed
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -25,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
-
+    private lateinit var loadingPB: ProgressBar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -42,7 +44,8 @@ class MainActivity : AppCompatActivity() {
             showTabs()
             navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
         }
-
+        loadingPB = findViewById(R.id.progressBar)
+        loadingPB.visibility = View.VISIBLE
         setupTabs(navController)
 
         val fab: FloatingActionButton = binding.fab
@@ -60,6 +63,7 @@ class MainActivity : AppCompatActivity() {
         tabs.setupWithViewPager(viewPager)
         tabs.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
+                loadingPB.visibility = View.VISIBLE
                 when (tab.position) {
                     0 -> navController.navigate(R.id.action_profileFragment_to_feedFragment)
                     1 -> navController.navigate(R.id.action_feedFragment_to_profileFragment)
@@ -85,7 +89,11 @@ class MainActivity : AppCompatActivity() {
     fun hideTabs() {
         binding.tabs.isVisible = false
     }
-    fun showTabs() {
+    private fun showTabs() {
         binding.tabs.isVisible = true
+    }
+
+    fun hideProgressBar() {
+        loadingPB.visibility = View.GONE
     }
 }
