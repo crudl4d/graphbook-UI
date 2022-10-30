@@ -18,6 +18,8 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.viewpager.widget.ViewPager
 import com.dogebook.R
 import com.dogebook.databinding.ActivityMainBinding
+import com.dogebook.feed.fragments.feed.FeedFragment
+import com.dogebook.feed.fragments.profile.ProfileFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
@@ -27,7 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private lateinit var loadingPB: ProgressBar
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -38,14 +40,19 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         val navController = (supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment).navController
         appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
         toolbar.setupWithNavController(navController, appBarConfiguration)
-        toolbar.setNavigationOnClickListener {
-            showTabs()
-            navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+//        toolbar.setNavigationOnClickListener {
+//            showTabs()
+//            navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+//        }
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if(destination.id == R.id.postFragment) {
+//                toolbar.visibility = View.GONE
+            } else {
+                toolbar.visibility = View.VISIBLE
+                showTabs()
+            }
         }
-        loadingPB = findViewById(R.id.progressBar)
-        loadingPB.visibility = View.VISIBLE
         setupTabs(navController)
 
         val fab: FloatingActionButton = binding.fab
@@ -63,7 +70,6 @@ class MainActivity : AppCompatActivity() {
         tabs.setupWithViewPager(viewPager)
         tabs.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                loadingPB.visibility = View.VISIBLE
                 when (tab.position) {
                     0 -> navController.navigate(R.id.action_profileFragment_to_feedFragment)
                     1 -> navController.navigate(R.id.action_feedFragment_to_profileFragment)
@@ -80,20 +86,11 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host)
-        return navController.navigateUp(appBarConfiguration)
-                || super.onSupportNavigateUp()
-    }
 
     fun hideTabs() {
         binding.tabs.isVisible = false
     }
     private fun showTabs() {
         binding.tabs.isVisible = true
-    }
-
-    fun hideProgressBar() {
-        loadingPB.visibility = View.GONE
     }
 }

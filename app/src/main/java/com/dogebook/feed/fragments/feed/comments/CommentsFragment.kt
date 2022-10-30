@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dogebook.Dogebook
+import com.dogebook.R
 import com.dogebook.databinding.FragmentCommentsBinding
 import com.dogebook.feed.MainActivity
 import com.google.gson.Gson
@@ -44,6 +45,8 @@ class CommentsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loadingPB = requireView().findViewById(R.id.progressBar)
+        loadingPB.visibility = View.VISIBLE
         populateData()
     }
 
@@ -56,13 +59,12 @@ class CommentsFragment : Fragment() {
         val handler = Handler(Looper.getMainLooper())
         executor.execute {
             val response = Dogebook.executeRequest(requireContext(), "/comments?page=0", Dogebook.METHOD.GET, null)
-            val comments = Gson().fromJson(response.body?.string(), Array<Comment>::class.java)
+            val comments = Dogebook.gson.fromJson(response.body?.string(), Array<Comment>::class.java)
             page++
             handler.post {
                 for (comment in comments) {
                     rowsArrayList.add(comment)
                 }
-                (requireActivity() as MainActivity).hideProgressBar()
                 initAdapter()
                 initScrollListener()
             }

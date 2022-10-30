@@ -19,6 +19,7 @@ class ProfileFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
+    private lateinit var loadingPB: ProgressBar
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,6 +31,8 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loadingPB = requireView().findViewById(R.id.progressBar)
+        loadingPB.visibility = View.VISIBLE
         populateData()
     }
 
@@ -39,7 +42,7 @@ class ProfileFragment : Fragment() {
             val response = Dogebook.executeRequest(requireContext(),"/me", Dogebook.METHOD.GET, null)
             val user = Gson().fromJson(response.body?.string(), User::class.java)
             binding.name.text = user.toString()
-            (requireActivity() as MainActivity).hideProgressBar()
+            loadingPB.visibility = View.GONE
             }
         }
     }

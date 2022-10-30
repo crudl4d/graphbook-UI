@@ -2,12 +2,21 @@ package com.dogebook
 
 import android.app.Application
 import android.content.Context
+import com.google.gson.*
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrl
+import java.lang.reflect.Type
+import java.time.LocalDateTime
 
 class Dogebook : Application() {
     companion object {
         lateinit var url: String
+        val gson = GsonBuilder().registerTypeAdapter(LocalDateTime::class.java,
+            JsonDeserializer { json: JsonElement, _: Type?, _: JsonDeserializationContext? ->
+                LocalDateTime.parse(
+                    json.asJsonPrimitive.asString
+                )
+            } as JsonDeserializer<LocalDateTime>).create()
 
         fun getToken(context: Context): String {
             return context.getSharedPreferences(R.string.preferences.toString(), Context.MODE_PRIVATE).getString("TOKEN", "").toString()

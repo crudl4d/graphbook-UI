@@ -26,7 +26,6 @@ class PostFragment : Fragment() {
     ): View {
         _binding = FragmentPostBinding.inflate(inflater, container, false)
         binding.editTextTextMultiLine.requestFocus()
-        (requireActivity() as MainActivity).hideProgressBar()
         return binding.root
     }
 

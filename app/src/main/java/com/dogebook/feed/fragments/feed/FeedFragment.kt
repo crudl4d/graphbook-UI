@@ -16,7 +16,10 @@ import com.dogebook.R
 import com.dogebook.databinding.FragmentFeedBinding
 import com.dogebook.feed.MainActivity
 import com.dogebook.feed.fragments.RecyclerViewAdapter
-import com.google.gson.Gson
+import com.google.gson.*
+import java.lang.reflect.Type
+import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import java.util.concurrent.Executors
 
 
@@ -63,7 +66,7 @@ class FeedFragment : Fragment() {
         val handler = Handler(Looper.getMainLooper())
         executor.execute {
             val response = Dogebook.executeRequest(requireContext(), "/posts?page=0", Dogebook.METHOD.GET, null)
-            val posts = Gson().fromJson(response.body?.string(), Array<Post>::class.java)
+            val posts = Dogebook.gson.fromJson(response.body?.string(), Array<Post>::class.java)
             page++
             handler.post {
                 for (post in posts) {
