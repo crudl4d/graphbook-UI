@@ -31,7 +31,7 @@ class RecyclerViewAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == VIEW_TYPE_ITEM) {
             val view: View =
-                LayoutInflater.from(parent.context).inflate(R.layout.item_row, parent, false)
+                LayoutInflater.from(parent.context).inflate(R.layout.post_row, parent, false)
             ItemViewHolder(view)
         } else {
             val view: View =
@@ -63,14 +63,14 @@ class RecyclerViewAdapter(
     }
 
     private inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var tvItem: TextView
+        var postContent: TextView
         var likeButton: Button
         var commentButton: Button
         var likesCount: TextView
         var author: TextView
 
         init {
-            tvItem = itemView.findViewById(R.id.tvItem)
+            postContent = itemView.findViewById(R.id.post_content)
             likeButton = itemView.findViewById(R.id.like_button)
             commentButton = itemView.findViewById(R.id.comments)
             likesCount = itemView.findViewById(R.id.likeCount)
@@ -93,7 +93,7 @@ class RecyclerViewAdapter(
     private fun populateItemRows(viewHolder: ItemViewHolder, position: Int) {
         val item: Post? = mItemList?.get(position)
         with(viewHolder) {
-            tvItem.text = item?.content
+            postContent.text = item?.content
             likesCount.text = item?.likes.toString()
             author.text = item?.author.toString()
             likeButton.setOnClickListener {
