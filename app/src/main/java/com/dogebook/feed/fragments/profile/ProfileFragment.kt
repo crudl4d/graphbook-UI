@@ -1,5 +1,8 @@
 package com.dogebook.feed.fragments.profile
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.media.Image
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -38,10 +41,14 @@ class ProfileFragment : Fragment() {
 
     private fun populateData() {
         lifecycleScope.launch {
+            val profilePicture: Bitmap
             val user  = withContext(Dispatchers.IO) {
+                profilePicture =  BitmapFactory.decodeStream(Util.executeRequest(requireContext(), "/me/profile-picture", Util.METHOD.GET, null)
+                    .body?.byteStream())
                 val response = Util.executeRequest(requireContext(),"/me", Util.METHOD.GET, null)
                 Gson().fromJson(response.body?.string(), User::class.java)
             }
+            binding.profilePicture.setImageBitmap(profilePicture)
             binding.name.text = user.toString()
             loadingPB.visibility = View.GONE
         }

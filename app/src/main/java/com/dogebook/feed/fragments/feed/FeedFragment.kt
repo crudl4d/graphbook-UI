@@ -76,7 +76,7 @@ class FeedFragment : Fragment() {
 
     private fun initAdapter() {
         recyclerView = view?.findViewById(R.id.recyclerView)
-        recyclerViewAdapter = RecyclerViewAdapter(rowsArrayList, requireContext(), findNavController())
+        recyclerViewAdapter = context?.let { RecyclerViewAdapter(rowsArrayList, it, findNavController()) }
         recyclerView?.adapter = recyclerViewAdapter
     }
 
