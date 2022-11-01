@@ -4,12 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager.widget.ViewPager
-import com.dogebook.Dogebook
+import com.dogebook.ExceptionHandler
+import com.dogebook.Util
 import com.dogebook.databinding.ActivityInitialBinding
 import com.dogebook.feed.MainActivity
 import com.dogebook.login.ui.main.SectionsPagerAdapter
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 
 class InitialActivity : AppCompatActivity() {
@@ -18,7 +17,8 @@ class InitialActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Dogebook.getToken(applicationContext).isNotBlank()) {
+        Thread.setDefaultUncaughtExceptionHandler(ExceptionHandler(baseContext))
+        if (Util.getToken(applicationContext).isNotBlank()) {
             val intent = Intent(applicationContext, MainActivity::class.java)
             startActivity(intent)
         }

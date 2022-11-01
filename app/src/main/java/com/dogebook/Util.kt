@@ -2,13 +2,15 @@ package com.dogebook
 
 import android.app.Application
 import android.content.Context
+import android.widget.Toast
 import com.google.gson.*
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import java.lang.reflect.Type
+import java.net.SocketTimeoutException
 import java.time.LocalDateTime
 
-class Dogebook : Application() {
+class Util : Application() {
     companion object {
         lateinit var url: String
         val gson = GsonBuilder().registerTypeAdapter(LocalDateTime::class.java,
@@ -19,13 +21,21 @@ class Dogebook : Application() {
             } as JsonDeserializer<LocalDateTime>).create()
 
         fun getToken(context: Context): String {
-            return context.getSharedPreferences(R.string.preferences.toString(), Context.MODE_PRIVATE).getString("TOKEN", "").toString()
+            return context.getSharedPreferences(
+                R.string.preferences.toString(),
+                Context.MODE_PRIVATE
+            ).getString("TOKEN", "").toString()
         }
 
-        fun executeRequest(ctx: Context, url: String, method: METHOD, body: RequestBody?): Response {
+        fun executeRequest(
+            ctx: Context,
+            url: String,
+            method: METHOD,
+            body: RequestBody?
+        ): Response {
             var body = body
             if (body == null) body = FormBody.Builder().build()
-            val fullUrl = ("${Dogebook.url}$url").toHttpUrl().newBuilder()
+            val fullUrl = ("${Util.url}$url").toHttpUrl().newBuilder()
                 .build().toString()
             val requestBuilder = Request.Builder()
                 .url(fullUrl)
@@ -37,7 +47,12 @@ class Dogebook : Application() {
                 METHOD.PUT -> requestBuilder.put(body)
             }
             val call: Call = OkHttpClient().newCall(requestBuilder.build())
-            return call.execute()
+            call.execute().let {
+                if (!it.isSuccessful) {
+                    Toast.makeText(ctx, "Network error", Toast.LENGTH_LONG).show()
+                }
+                return it
+            }
         }
     }
 

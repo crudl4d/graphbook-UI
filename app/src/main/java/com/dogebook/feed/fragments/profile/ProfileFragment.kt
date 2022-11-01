@@ -6,14 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
-import com.dogebook.Dogebook
+import androidx.lifecycle.lifecycleScope
+import com.dogebook.Util
 import com.dogebook.R
 import com.dogebook.databinding.FragmentProfileBinding
-import com.dogebook.feed.MainActivity
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class ProfileFragment : Fragment() {
 
@@ -31,19 +32,18 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loadingPB = requireView().findViewById(R.id.progressBar)
-        loadingPB.visibility = View.VISIBLE
+        loadingPB = requireView().findViewById<ProgressBar?>(R.id.progressBar).apply { visibility = View.VISIBLE }
         populateData()
     }
 
     private fun populateData() {
-        runBlocking {
-            launch(Dispatchers.Default) {
-            val response = Dogebook.executeRequest(requireContext(),"/me", Dogebook.METHOD.GET, null)
-            val user = Gson().fromJson(response.body?.string(), User::class.java)
+        lifecycleScope.launch {
+            val user  = withContext(Dispatchers.IO) {
+                val response = Util.executeRequest(requireContext(),"/me", Util.METHOD.GET, null)
+                Gson().fromJson(response.body?.string(), User::class.java)
+            }
             binding.name.text = user.toString()
             loadingPB.visibility = View.GONE
-            }
         }
     }
 }

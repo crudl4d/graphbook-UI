@@ -10,7 +10,7 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.dogebook.Dogebook
+import com.dogebook.Util
 import com.dogebook.R
 import java.util.concurrent.Executors
 
@@ -29,7 +29,7 @@ class CommentRecyclerViewAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == VIEW_TYPE_ITEM) {
             val view: View =
-                LayoutInflater.from(parent.context).inflate(R.layout.item_row, parent, false)
+                LayoutInflater.from(parent.context).inflate(R.layout.comment_row, parent, false)
             ItemViewHolder(view)
         } else {
             val view: View =
@@ -61,16 +61,16 @@ class CommentRecyclerViewAdapter(
     }
 
     private inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var tvItem: TextView
+        var content: TextView
         var likeButton: Button
         var likesCount: TextView
         var author: TextView
 
         init {
-            tvItem = itemView.findViewById(R.id.tvItem)
-            likeButton = itemView.findViewById(R.id.like_button)
-            likesCount = itemView.findViewById(R.id.likeCount)
-            author = itemView.findViewById(R.id.author)
+            content = itemView.findViewById(R.id.comm_content)
+            likeButton = itemView.findViewById(R.id.comm_like_button)
+            likesCount = itemView.findViewById(R.id.comm_like_count)
+            author = itemView.findViewById(R.id.comm_author)
         }
     }
 
@@ -88,25 +88,27 @@ class CommentRecyclerViewAdapter(
 
     private fun populateItemRows(viewHolder: ItemViewHolder, position: Int) {
         val item: Comment? = mItemList?.get(position)
-        viewHolder.tvItem.text = item?.content
-        viewHolder.likesCount.text = item?.likes.toString()
-        viewHolder.author.text = item?.author.toString()
-        viewHolder.likeButton.setOnClickListener {
-            if (item?.likedByUser == false) {
-                viewHolder.likesCount.text = (viewHolder.likesCount.text.toString().toInt() + 1).toString()
-                it.setBackgroundColor(this.ctx.getColor(R.color.purple_500))
-                item.likedByUser = true
-            } else {
-                viewHolder.likesCount.text = (viewHolder.likesCount.text.toString().toInt() - 1).toString()
-                it.setBackgroundColor(this.ctx.getColor(R.color.purple_light))
-                item?.likedByUser = false
-            }
-            val executor = Executors.newSingleThreadExecutor()
-            val handler = Handler(Looper.getMainLooper())
-            executor.execute {
-                Dogebook.executeRequest(ctx, "/posts/${item?.id}/like", Dogebook.METHOD.POST, null)
-                handler.post {
-                    //todo increment likes
+        with(viewHolder) {
+            content.text = item?.content
+            likesCount.text = item?.likes.toString()
+            author.text = item?.author.toString()
+            likeButton.setOnClickListener {
+                if (item?.likedByUser == false) {
+                    likesCount.text = (likesCount.text.toString().toInt() + 1).toString()
+                    it.setBackgroundColor(this@CommentRecyclerViewAdapter.ctx.getColor(R.color.purple_500))
+                    item.likedByUser = true
+                } else {
+                    likesCount.text = (likesCount.text.toString().toInt() - 1).toString()
+                    it.setBackgroundColor(this@CommentRecyclerViewAdapter.ctx.getColor(R.color.purple_light))
+                    item?.likedByUser = false
+                }
+                val executor = Executors.newSingleThreadExecutor()
+                val handler = Handler(Looper.getMainLooper())
+                executor.execute {
+                    Util.executeRequest(ctx, "/posts/${item?.id}/like", Util.METHOD.POST, null)
+                    handler.post {
+                        //todo increment likes
+                    }
                 }
             }
         }

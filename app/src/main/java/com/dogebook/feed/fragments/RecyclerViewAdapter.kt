@@ -1,6 +1,7 @@
 package com.dogebook.feed.fragments
 
 import android.content.Context
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
@@ -11,7 +12,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
-import com.dogebook.Dogebook
+import com.dogebook.Util
 import com.dogebook.R
 import com.dogebook.feed.fragments.feed.Post
 import java.util.concurrent.Executors
@@ -91,31 +92,35 @@ class RecyclerViewAdapter(
 
     private fun populateItemRows(viewHolder: ItemViewHolder, position: Int) {
         val item: Post? = mItemList?.get(position)
-        viewHolder.tvItem.text = item?.content
-        viewHolder.likesCount.text = item?.likes.toString()
-        viewHolder.author.text = item?.author.toString()
-        viewHolder.likeButton.setOnClickListener {
-            if (item?.likedByUser == false) {
-                viewHolder.likesCount.text = (viewHolder.likesCount.text.toString().toInt() + 1).toString()
-                it.setBackgroundColor(this.ctx.getColor(R.color.purple_500))
-                item.likedByUser = true
-            } else {
-                viewHolder.likesCount.text = (viewHolder.likesCount.text.toString().toInt() - 1).toString()
-                it.setBackgroundColor(this.ctx.getColor(R.color.purple_light))
-                item?.likedByUser = false
-            }
-            val executor = Executors.newSingleThreadExecutor()
-            val handler = Handler(Looper.getMainLooper())
-            executor.execute {
-                Dogebook.executeRequest(ctx, "/posts/${item?.id}/like", Dogebook.METHOD.POST, null)
-                handler.post {
-                    //todo increment likes
+        with(viewHolder) {
+            tvItem.text = item?.content
+            likesCount.text = item?.likes.toString()
+            author.text = item?.author.toString()
+            likeButton.setOnClickListener {
+                if (item?.likedByUser == false) {
+                    likesCount.text = (likesCount.text.toString().toInt() + 1).toString()
+                    it.setBackgroundColor(this@RecyclerViewAdapter.ctx.getColor(R.color.purple_500))
+                    item.likedByUser = true
+                } else {
+                    likesCount.text = (viewHolder.likesCount.text.toString().toInt() - 1).toString()
+                    it.setBackgroundColor(this@RecyclerViewAdapter.ctx.getColor(R.color.purple_light))
+                    item?.likedByUser = false
+                }
+                val executor = Executors.newSingleThreadExecutor()
+                val handler = Handler(Looper.getMainLooper())
+                executor.execute {
+                    Util.executeRequest(ctx, "/posts/${item?.id}/like", Util.METHOD.POST, null)
+                    handler.post {
+                        //todo increment likes
+                    }
                 }
             }
-        }
-        viewHolder.commentButton.setOnClickListener {
-            navController.navigate(R.id.action_feedFragment_to_commentsFragment)
-            //ctx.startActivity(Intent(this.ctx, Comments::class.java))
+            commentButton.setOnClickListener {
+                with(Bundle()) {
+                    putLong("postId", item?.id ?: -1)
+                    navController.navigate(R.id.action_feedFragment_to_commentsFragment, this)
+                }
+            }
         }
     }
 }

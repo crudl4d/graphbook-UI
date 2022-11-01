@@ -16,6 +16,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.viewpager.widget.ViewPager
+import com.dogebook.ExceptionHandler
 import com.dogebook.R
 import com.dogebook.databinding.ActivityMainBinding
 import com.dogebook.feed.fragments.feed.FeedFragment
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Thread.setDefaultUncaughtExceptionHandler(ExceptionHandler(baseContext))
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -40,14 +42,18 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         val navController = (supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment).navController
         appBarConfiguration = AppBarConfiguration(navController.graph)
+        val appBarConfiguration = AppBarConfiguration
+            .Builder(
+                R.id.feedFragment,
+                R.id.profileFragment
+            )
+            .build()
+
+        setupActionBarWithNavController(navController, appBarConfiguration)
         toolbar.setupWithNavController(navController, appBarConfiguration)
-//        toolbar.setNavigationOnClickListener {
-//            showTabs()
-//            navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-//        }
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if(destination.id == R.id.postFragment) {
-//                toolbar.visibility = View.GONE
+            if(destination.id == R.id.postFragment || destination.id == R.id.comments) {
+                hideTabs()
             } else {
                 toolbar.visibility = View.VISIBLE
                 showTabs()
@@ -76,13 +82,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            override fun onTabUnselected(p0: TabLayout.Tab?) {
-
-            }
-
-            override fun onTabReselected(p0: TabLayout.Tab?) {
-
-            }
+            override fun onTabUnselected(p0: TabLayout.Tab?) {}
+            override fun onTabReselected(p0: TabLayout.Tab?) {}
         })
     }
 

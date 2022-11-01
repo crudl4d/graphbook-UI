@@ -22,7 +22,7 @@
             app:launchSingleTop="true"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@id/feedFragment"
+            app:popUpTo="@id/post_nav_graph"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_feedFragment_to_commentsFragment"
@@ -48,7 +48,7 @@
             app:launchSingleTop="true"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim"
-            app:popUpTo="@id/profileFragment"
+            app:popUpTo="@id/post_nav_graph"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment

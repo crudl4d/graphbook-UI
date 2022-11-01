@@ -1,6 +1,6 @@
 package com.dogebook.login.ui.main.login.data
 
-import com.dogebook.Dogebook
+import com.dogebook.Util
 import com.dogebook.login.ui.main.login.data.model.LoggedInUser
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -13,7 +13,7 @@ class LoginDataSource {
 
     fun login(credentials: String): Result<LoggedInUser> {
         try {
-            val url = ("${Dogebook.url}/users/login/").toHttpUrl().newBuilder()
+            val url = ("${Util.url}/users/login/").toHttpUrl().newBuilder()
                 .build().toString()
             val request: Request = Request.Builder()
                 .post(FormBody.Builder().build())

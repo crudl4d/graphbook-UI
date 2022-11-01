@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/pic"
+    android:background="@drawable/background"
     android:orientation="vertical"
     tools:context=".feed.fragments.feed.FeedFragment">
 
@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <include layout="@layout/progress_bar"/>
+    <include layout="@layout/progress_bar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

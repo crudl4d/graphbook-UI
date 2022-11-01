@@ -11,15 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.dogebook.Dogebook
+import com.dogebook.Util
 import com.dogebook.R
 import com.dogebook.databinding.FragmentFeedBinding
-import com.dogebook.feed.MainActivity
 import com.dogebook.feed.fragments.RecyclerViewAdapter
 import com.google.gson.*
-import java.lang.reflect.Type
-import java.time.LocalDateTime
-import java.time.ZonedDateTime
 import java.util.concurrent.Executors
 
 
@@ -48,7 +44,6 @@ class FeedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.writePost.setOnClickListener {
-            (requireActivity() as MainActivity).hideTabs()
             findNavController().navigate(R.id.action_feedFragment_to_postFragment)
         }
 
@@ -65,8 +60,8 @@ class FeedFragment : Fragment() {
         val executor = Executors.newSingleThreadExecutor()
         val handler = Handler(Looper.getMainLooper())
         executor.execute {
-            val response = Dogebook.executeRequest(requireContext(), "/posts?page=0", Dogebook.METHOD.GET, null)
-            val posts = Dogebook.gson.fromJson(response.body?.string(), Array<Post>::class.java)
+            val response = Util.executeRequest(requireContext(), "/posts?page=0", Util.METHOD.GET, null)
+            val posts = Util.gson.fromJson(response.body?.string(), Array<Post>::class.java)
             page++
             handler.post {
                 for (post in posts) {
@@ -107,10 +102,10 @@ class FeedFragment : Fragment() {
             val executor = Executors.newSingleThreadExecutor()
             val handler = Handler()
             executor.execute {
-                val response = Dogebook.executeRequest(
+                val response = Util.executeRequest(
                     requireContext(),
                     "/posts?page=$page",
-                    Dogebook.METHOD.GET,
+                    Util.METHOD.GET,
                     null
                 )
                 val posts = Gson().fromJson(response.body?.string(), Array<Post>::class.java)
