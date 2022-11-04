@@ -2,21 +2,19 @@ package com.dogebook.feed.fragments.profile
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.media.Image
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.dogebook.Util
 import com.dogebook.R
+import com.dogebook.Util
 import com.dogebook.databinding.FragmentProfileBinding
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
 class ProfileFragment : Fragment() {

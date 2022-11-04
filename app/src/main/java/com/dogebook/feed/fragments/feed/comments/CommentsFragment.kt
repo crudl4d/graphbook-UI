@@ -10,8 +10,8 @@ import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.dogebook.Util
 import com.dogebook.R
+import com.dogebook.Util
 import com.dogebook.databinding.FragmentCommentsBinding
 import com.google.gson.Gson
 import java.util.concurrent.Executors

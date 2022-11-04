@@ -10,8 +10,8 @@ import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.dogebook.Util
 import com.dogebook.R
+import com.dogebook.Util
 import java.util.concurrent.Executors
 
 /**

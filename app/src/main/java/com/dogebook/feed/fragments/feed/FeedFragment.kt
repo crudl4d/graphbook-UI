@@ -3,7 +3,6 @@ package com.dogebook.feed.fragments.feed
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,14 +12,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.dogebook.Util
 import com.dogebook.R
+import com.dogebook.Util
 import com.dogebook.databinding.FragmentFeedBinding
 import com.google.gson.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.Response
 import java.util.concurrent.Executors
 
 

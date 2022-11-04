@@ -1,7 +1,6 @@
 package com.dogebook.feed.fragments.feed
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,8 +13,8 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
-import com.dogebook.Util
 import com.dogebook.R
+import com.dogebook.Util
 import java.util.concurrent.Executors
 
 

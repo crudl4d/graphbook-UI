@@ -3,11 +3,13 @@ package com.dogebook
 import android.app.Application
 import android.content.Context
 import android.widget.Toast
-import com.google.gson.*
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import java.lang.reflect.Type
-import java.net.SocketTimeoutException
 import java.time.LocalDateTime
 
 class Util : Application() {
