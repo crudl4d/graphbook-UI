@@ -1,5 +1,6 @@
 package com.dogebook.feed.fragments.feed
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -8,14 +9,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dogebook.Util
 import com.dogebook.R
 import com.dogebook.databinding.FragmentFeedBinding
-import com.dogebook.feed.fragments.RecyclerViewAdapter
 import com.google.gson.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.Response
 import java.util.concurrent.Executors
 
 
@@ -57,20 +62,21 @@ class FeedFragment : Fragment() {
     }
 
     private fun fetchPosts() {
-        val executor = Executors.newSingleThreadExecutor()
-        val handler = Handler(Looper.getMainLooper())
-        executor.execute {
-            val response = Util.executeRequest(requireContext(), "/posts?page=0", Util.METHOD.GET, null)
-            val posts = Util.gson.fromJson(response.body?.string(), Array<Post>::class.java)
-            page++
-            handler.post {
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                val response = Util.executeRequest(requireContext(), "/posts?page=0", Util.METHOD.GET, null)
+                val posts = Util.gson.fromJson(response.body?.string(), Array<Post>::class.java)
                 for (post in posts) {
+                    val authorPicture = Util
+                        .executeRequest(requireContext(), "/users/${post.author?.id}/profile-picture", Util.METHOD.GET, null).body?.byteStream()
+                    post.authorPicture = BitmapFactory.decodeStream(authorPicture)
                     rowsArrayList.add(post)
                 }
-                loadingPB.visibility = View.GONE
-                initAdapter()
-                initScrollListener()
             }
+            page++
+            loadingPB.visibility = View.GONE
+            initAdapter()
+            initScrollListener()
         }
     }
 

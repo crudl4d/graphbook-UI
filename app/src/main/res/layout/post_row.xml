@@ -21,10 +21,12 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/post_author_picture"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
+                android:maxWidth="1dp"
+                android:maxHeight="1dp"
                 app:srcCompat="@android:mipmap/sym_def_app_icon" />
 
             <LinearLayout

@@ -1,6 +1,7 @@
-package com.dogebook.feed.fragments
+package com.dogebook.feed.fragments.feed
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -8,13 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.dogebook.Util
 import com.dogebook.R
-import com.dogebook.feed.fragments.feed.Post
 import java.util.concurrent.Executors
 
 
@@ -68,6 +69,7 @@ class RecyclerViewAdapter(
         var commentButton: Button
         var likesCount: TextView
         var author: TextView
+        var picture: ImageView
 
         init {
             postContent = itemView.findViewById(R.id.post_content)
@@ -75,6 +77,7 @@ class RecyclerViewAdapter(
             commentButton = itemView.findViewById(R.id.comments)
             likesCount = itemView.findViewById(R.id.likeCount)
             author = itemView.findViewById(R.id.author)
+            picture = itemView.findViewById(R.id.post_author_picture)
         }
     }
 
@@ -121,6 +124,7 @@ class RecyclerViewAdapter(
                     navController.navigate(R.id.action_feedFragment_to_commentsFragment, this)
                 }
             }
+            if (item?.authorPicture != null) picture.setImageBitmap(item.authorPicture)
         }
     }
 }
