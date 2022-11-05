@@ -2,15 +2,18 @@ package com.dogebook
 
 import android.app.Application
 import android.content.Context
+import android.os.Looper
 import android.widget.Toast
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
+import kotlinx.coroutines.currentCoroutineContext
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import java.lang.reflect.Type
 import java.time.LocalDateTime
+import kotlin.coroutines.coroutineContext
 
 class Util : Application() {
     companion object {
@@ -22,15 +25,15 @@ class Util : Application() {
                 )
             } as JsonDeserializer<LocalDateTime>).create()
 
-        fun getToken(context: Context): String {
-            return context.getSharedPreferences(
+        fun getToken(context: Context?): String {
+            return context?.getSharedPreferences(
                 R.string.preferences.toString(),
                 Context.MODE_PRIVATE
-            ).getString("TOKEN", "").toString()
+            )?.getString("TOKEN", "").toString()
         }
 
         fun executeRequest(
-            ctx: Context,
+            ctx: Context?,
             url: String,
             method: METHOD,
             body: RequestBody?
@@ -50,7 +53,7 @@ class Util : Application() {
             }
             val call: Call = OkHttpClient().newCall(requestBuilder.build())
             call.execute().let {
-                if (!it.isSuccessful) {
+                if (!it.isSuccessful && ctx != null) {
                     Toast.makeText(ctx, "Network error", Toast.LENGTH_LONG).show()
                 }
                 return it

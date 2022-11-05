@@ -43,7 +43,7 @@ class ProfileFragment : Fragment() {
             val user  = withContext(Dispatchers.IO) {
                 profilePicture =  BitmapFactory.decodeStream(Util.executeRequest(requireContext(), "/me/profile-picture", Util.METHOD.GET, null)
                     .body?.byteStream())
-                val response = Util.executeRequest(requireContext(),"/me", Util.METHOD.GET, null)
+                val response = Util.executeRequest(context ,"/me", Util.METHOD.GET, null)
                 Gson().fromJson(response.body?.string(), User::class.java)
             }
             binding.profilePicture.setImageBitmap(profilePicture)

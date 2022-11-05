@@ -72,7 +72,7 @@ class CommentsFragment : Fragment() {
     }
 
     private fun initAdapter() {
-        recyclerViewAdapter = CommentRecyclerViewAdapter(requireContext(), rowsArrayList)
+        recyclerViewAdapter = context?.let { CommentRecyclerViewAdapter(it, rowsArrayList) }
         recyclerView = binding.recyclerView.apply { adapter = recyclerViewAdapter }
     }
 
@@ -99,7 +99,7 @@ class CommentsFragment : Fragment() {
             val handler = Handler()
             executor.execute {
                 val response = Util.executeRequest(
-                    requireContext(),
+                    context,
                     "/posts/$postId/comments?page=$page",
                     Util.METHOD.GET,
                     null

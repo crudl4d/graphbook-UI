@@ -36,7 +36,7 @@ class PostFragment : Fragment() {
             lifecycleScope.launch {
                 withContext(Dispatchers.Default) {
                     Util.executeRequest(
-                        requireContext(), "/posts", Util.METHOD.POST,
+                        context, "/posts", Util.METHOD.POST,
                         Gson().toJson(post).toRequestBody("application/json".toMediaTypeOrNull())
                     )
                 }

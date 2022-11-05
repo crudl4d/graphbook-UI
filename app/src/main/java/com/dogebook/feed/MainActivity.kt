@@ -11,7 +11,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.viewpager.widget.ViewPager
 import com.dogebook.ExceptionHandler
 import com.dogebook.R
 import com.dogebook.databinding.ActivityMainBinding
@@ -46,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         toolbar.setupWithNavController(navController, appBarConfiguration)
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if(destination.id == R.id.postFragment || destination.id == R.id.comments) {
+            if (destination.id == R.id.postFragment || destination.id == R.id.comments) {
                 hideTabs()
             } else {
                 toolbar.visibility = View.VISIBLE
@@ -65,13 +64,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupTabs(navController: NavController) {
-        val viewPager: ViewPager = binding.viewPager
         val tabs: TabLayout = binding.tabs
-        tabs.setupWithViewPager(viewPager)
         tabs.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 when (tab.position) {
-                    0 -> navController.navigate(R.id.action_profileFragment_to_feedFragment)
+                    0 -> navController.popBackStack()
                     1 -> navController.navigate(R.id.action_feedFragment_to_profileFragment)
                 }
             }
