@@ -1,6 +1,7 @@
 package com.dogebook.login.ui.main.register.data
 
-import com.dogebook.login.ui.main.register.data.model.LoggedInUser
+import com.dogebook.login.ui.main.register.data.model.RegisteredUser
+import com.dogebook.login.ui.main.register.ui.register.User
 
 /**
  * Class that requests authentication and user information from the remote data source and
@@ -10,11 +11,8 @@ import com.dogebook.login.ui.main.register.data.model.LoggedInUser
 class RegisterRepository(val dataSource: RegisterDataSource) {
 
     // in-memory cache of the loggedInUser object
-    var user: LoggedInUser? = null
+    var user: RegisteredUser? = null
         private set
-
-    val isLoggedIn: Boolean
-        get() = user != null
 
     init {
         // If user credentials will be cached in local storage, it is recommended it be encrypted
@@ -22,14 +20,9 @@ class RegisterRepository(val dataSource: RegisterDataSource) {
         user = null
     }
 
-    fun logout() {
-        user = null
-        dataSource.logout()
-    }
-
-    fun login(username: String, password: String): Result<LoggedInUser> {
+    fun register(user: User): Result<RegisteredUser> {
         // handle login
-        val result = dataSource.login(username, password)
+        val result = dataSource.register(user)
 
         if (result is Result.Success) {
             setLoggedInUser(result.data)
@@ -38,9 +31,7 @@ class RegisterRepository(val dataSource: RegisterDataSource) {
         return result
     }
 
-    private fun setLoggedInUser(loggedInUser: LoggedInUser) {
-        this.user = loggedInUser
-        // If user credentials will be cached in local storage, it is recommended it be encrypted
-        // @see https://developer.android.com/training/articles/keystore
+    private fun setLoggedInUser(registeredUser: RegisteredUser) {
+        this.user = registeredUser
     }
 }

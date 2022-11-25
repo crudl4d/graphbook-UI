@@ -29,7 +29,7 @@ class FeedViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 val response = Util.executeRequest(context, "/posts?page=0", Util.METHOD.GET, null)
-                val posts = Util.gson.fromJson(response.body?.string(), Array<Post>::class.java)
+                val posts = Util.gson.fromJson(response.body.string(), Array<Post>::class.java)
                 for (post in posts) {
                     val authorPicture = Util
                         .executeRequest(context, "/users/${post.author?.id}/profile-picture", Util.METHOD.GET, null).body?.byteStream()

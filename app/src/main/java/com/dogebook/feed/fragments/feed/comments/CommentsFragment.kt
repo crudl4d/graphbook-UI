@@ -60,7 +60,7 @@ class CommentsFragment : Fragment() {
         val handler = Handler(Looper.getMainLooper())
         executor.execute {
             val response = Util.executeRequest(requireContext(), "/posts/$postId/comments?page=0", Util.METHOD.GET, null)
-            val comments = Util.gson.fromJson(response.body?.string(), Array<Comment>::class.java)
+            val comments = Util.gson.fromJson(response.body.string(), Array<Comment>::class.java)
             page++
             handler.post {
                 comments.forEach { rowsArrayList.add(it) }
@@ -104,7 +104,7 @@ class CommentsFragment : Fragment() {
                     Util.METHOD.GET,
                     null
                 )
-                val x = response.body?.string()
+                val x = response.body.string()
                 val comments = Gson().fromJson(x, Array<Comment>::class.java)
                 handler.post {
                     page++

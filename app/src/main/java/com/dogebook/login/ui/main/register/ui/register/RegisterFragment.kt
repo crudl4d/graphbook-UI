@@ -1,4 +1,4 @@
-package com.dogebook.login.ui.main.register.ui.login
+package com.dogebook.login.ui.main.register.ui.register
 
 import android.os.Bundle
 import android.text.Editable
@@ -40,33 +40,39 @@ class RegisterFragment : Fragment() {
         registerViewModel = ViewModelProvider(this, RegisterViewModelFactory())
             .get(RegisterViewModel::class.java)
 
+        val firstName = binding.firstName
+        val lastName = binding.lastName
+        val birthdate = binding.birthdate
         val usernameEditText = binding.username
         val passwordEditText = binding.password
-        val loginButton = binding.login
+        val registerButton = binding.register
         val loadingProgressBar = binding.loading
 
         registerViewModel.registerFormState.observe(viewLifecycleOwner,
-            Observer { loginFormState ->
-                if (loginFormState == null) {
+            Observer { registerFormState ->
+                if (registerFormState == null) {
                     return@Observer
                 }
-                loginButton.isEnabled = loginFormState.isDataValid
-                loginFormState.usernameError?.let {
+                registerButton.isEnabled = registerFormState.isDataValid
+                registerFormState.usernameError?.let {
                     usernameEditText.error = getString(it)
                 }
-                loginFormState.passwordError?.let {
+                registerFormState.passwordError?.let {
                     passwordEditText.error = getString(it)
+                }
+                registerFormState.birthDateError?.let {
+                    birthdate.error = getString(it)
                 }
             })
 
-        registerViewModel.loginResult.observe(viewLifecycleOwner,
-            Observer { loginResult ->
-                loginResult ?: return@Observer
+        registerViewModel.registerResult.observe(viewLifecycleOwner,
+            Observer { registerResult ->
+                registerResult ?: return@Observer
                 loadingProgressBar.visibility = View.GONE
-                loginResult.error?.let {
-                    showLoginFailed(it)
+                registerResult.error?.let {
+                    showRegisterFailed(it)
                 }
-                loginResult.success?.let {
+                registerResult.success?.let {
                     updateUiWithUser(it)
                 }
             })
@@ -81,29 +87,41 @@ class RegisterFragment : Fragment() {
             }
 
             override fun afterTextChanged(s: Editable) {
-                registerViewModel.loginDataChanged(
+                registerViewModel.registerDataChanged(
                     usernameEditText.text.toString(),
-                    passwordEditText.text.toString()
+                    passwordEditText.text.toString(),
+                    birthdate.text.toString()
                 )
             }
         }
         usernameEditText.addTextChangedListener(afterTextChangedListener)
         passwordEditText.addTextChangedListener(afterTextChangedListener)
+        birthdate.addTextChangedListener(afterTextChangedListener)
         passwordEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                registerViewModel.login(
-                    usernameEditText.text.toString(),
-                    passwordEditText.text.toString()
+                registerViewModel.register(
+                    User(
+                        firstName.text.toString(),
+                        lastName.text.toString(),
+                        usernameEditText.text.toString(),
+                        passwordEditText.text.toString(),
+                        birthdate.text.toString()
+                    )
                 )
             }
             false
         }
 
-        loginButton.setOnClickListener {
+        registerButton.setOnClickListener {
             loadingProgressBar.visibility = View.VISIBLE
-            registerViewModel.login(
-                usernameEditText.text.toString(),
-                passwordEditText.text.toString()
+            registerViewModel.register(
+                User(
+                    firstName.text.toString(),
+                    lastName.text.toString(),
+                    usernameEditText.text.toString(),
+                    passwordEditText.text.toString(),
+                    birthdate.text.toString()
+                )
             )
         }
     }
@@ -115,7 +133,7 @@ class RegisterFragment : Fragment() {
         Toast.makeText(appContext, welcome, Toast.LENGTH_LONG).show()
     }
 
-    private fun showLoginFailed(@StringRes errorString: Int) {
+    private fun showRegisterFailed(@StringRes errorString: Int) {
         val appContext = context?.applicationContext ?: return
         Toast.makeText(appContext, errorString, Toast.LENGTH_LONG).show()
     }

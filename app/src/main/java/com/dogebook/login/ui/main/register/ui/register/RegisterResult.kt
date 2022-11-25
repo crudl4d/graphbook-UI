@@ -1,4 +1,4 @@
-package com.dogebook.login.ui.main.register.ui.login
+package com.dogebook.login.ui.main.register.ui.register
 
 /**
  * Authentication result : success (user details) or error message.

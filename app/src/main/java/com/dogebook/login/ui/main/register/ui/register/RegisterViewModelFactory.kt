@@ -1,4 +1,4 @@
-package com.dogebook.login.ui.main.register.ui.login
+package com.dogebook.login.ui.main.register.ui.register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -15,7 +15,7 @@ class RegisterViewModelFactory : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(RegisterViewModel::class.java)) {
             return RegisterViewModel(
-                loginRepository = RegisterRepository(
+                registerRepository = RegisterRepository(
                     dataSource = RegisterDataSource()
                 )
             ) as T

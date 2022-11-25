@@ -1,4 +1,4 @@
-package com.dogebook.login.ui.main.register.ui.login
+package com.dogebook.login.ui.main.register.ui.register
 
 /**
  * User details post authentication that is exposed to the UI

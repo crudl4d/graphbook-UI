@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.dogebook.R
 import com.dogebook.login.ui.main.login.ui.LoginFragment
-import com.dogebook.login.ui.main.register.ui.login.RegisterFragment
+import com.dogebook.login.ui.main.register.ui.register.RegisterFragment
 
 private val TAB_TITLES = arrayOf(
     R.string.tab_login,

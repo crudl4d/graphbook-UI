@@ -44,10 +44,18 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_profileFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/commentsFragment"
         android:name="com.dogebook.feed.fragments.feed.comments.CommentsFragment"
         android:label="fragment_comments_list"
         tools:layout="@layout/fragment_comments" />
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.dogebook.feed.fragments.profile.edit.EditProfileFragment"
+        android:label="fragment_edit_profile"
+        tools:layout="@layout/fragment_edit_profile" />
 </navigation>

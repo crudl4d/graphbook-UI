@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         toolbar.setupWithNavController(navController, appBarConfiguration)
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.postFragment || destination.id == R.id.comments) {
+            if (destination.id == R.id.postFragment || destination.id == R.id.comments || destination.id == R.id.editProfileFragment) {
                 hideTabs()
             } else {
                 toolbar.visibility = View.VISIBLE
