@@ -5,6 +5,7 @@ data class User(
     val surname: String,
     val email: String,
     val birthDate: String,
+    val password: String?,
 )
 {
     override fun toString(): String {

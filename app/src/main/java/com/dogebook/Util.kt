@@ -2,7 +2,6 @@ package com.dogebook
 
 import android.app.Application
 import android.content.Context
-import android.widget.Toast
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
@@ -12,6 +11,8 @@ import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Response.Builder
 import java.lang.reflect.Type
 import java.time.LocalDateTime
+import java.util.concurrent.TimeUnit
+
 
 class Util : Application() {
     companion object {
@@ -49,7 +50,13 @@ class Util : Application() {
                 METHOD.PATCH -> requestBuilder.patch(body)
                 METHOD.PUT -> requestBuilder.put(body)
             }
-            val call: Call = OkHttpClient().newCall(requestBuilder.build())
+            val client = OkHttpClient.Builder()
+                .connectTimeout(20, TimeUnit.SECONDS)
+                .writeTimeout(20, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .build()
+            val call: Call = client
+                .newCall(requestBuilder.build())
             call.execute().let {
 //                if (!it.isSuccessful && ctx != null) {
 //                    Toast.makeText(ctx, "Network error", Toast.LENGTH_LONG).show()
