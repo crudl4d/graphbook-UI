@@ -45,6 +45,9 @@ class FeedFragment : Fragment() {
         binding.writePost.setOnClickListener {
             findNavController().navigate(R.id.action_feedFragment_to_postFragment)
         }
+        binding.search.setOnClickListener {
+            findNavController().navigate(R.id.action_feedFragment_to_searchFragment)
+        }
     }
 
 

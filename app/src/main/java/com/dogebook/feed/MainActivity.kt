@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private val toHideTabs = listOf(R.id.postFragment, R.id.comments, R.id.editProfileFragment, R.id.searchFragment)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         toolbar.setupWithNavController(navController, appBarConfiguration)
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.postFragment || destination.id == R.id.comments || destination.id == R.id.editProfileFragment) {
+            if (toHideTabs.contains(destination.id)) {
                 hideTabs()
             } else {
                 toolbar.visibility = View.VISIBLE

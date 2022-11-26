@@ -104,8 +104,8 @@ class CommentsFragment : Fragment() {
                     Util.METHOD.GET,
                     null
                 )
-                val x = response.body.string()
-                val comments = Gson().fromJson(x, Array<Comment>::class.java)
+                val responseBody = response.body.string()
+                val comments = Gson().fromJson(responseBody, Array<Comment>::class.java)
                 handler.post {
                     page++
                     comments.forEach { rowsArrayList.add(it) }

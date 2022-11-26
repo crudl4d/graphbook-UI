@@ -1,4 +1,5 @@
-package com.dogebook.feed.fragments.feed.comments
+package com.dogebook.feed.fragments.search
+
 
 import android.content.Context
 import android.os.Handler
@@ -6,17 +7,19 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.dogebook.R
 import com.dogebook.Util
 import java.util.concurrent.Executors
 
-class CommentRecyclerViewAdapter(
+class UsersRecyclerViewAdapter(
     private val ctx: Context,
-    private val mItemList: List<Comment?>?
+    private val mItemList: List<FoundUser?>?,
+    private val navController: NavController
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val VIEW_TYPE_ITEM = 0
@@ -25,7 +28,7 @@ class CommentRecyclerViewAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == VIEW_TYPE_ITEM) {
             val view: View =
-                LayoutInflater.from(parent.context).inflate(R.layout.comment_row, parent, false)
+                LayoutInflater.from(parent.context).inflate(R.layout.user_row, parent, false)
             ItemViewHolder(view)
         } else {
             val view: View =
@@ -51,16 +54,12 @@ class CommentRecyclerViewAdapter(
     }
 
     private inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var content: TextView
-        var likeButton: Button
-        var likesCount: TextView
-        var author: TextView
+        var name: TextView
+        var pic: ImageView
 
         init {
-            content = itemView.findViewById(R.id.comm_content)
-            likeButton = itemView.findViewById(R.id.comm_like_button)
-            likesCount = itemView.findViewById(R.id.comm_like_count)
-            author = itemView.findViewById(R.id.comm_author)
+            name = itemView.findViewById(R.id.found_user_name)
+            pic = itemView.findViewById(R.id.found_user_pic)
         }
     }
 
@@ -77,31 +76,19 @@ class CommentRecyclerViewAdapter(
     }
 
     private fun populateItemRows(viewHolder: ItemViewHolder, position: Int) {
-        val item: Comment? = mItemList?.get(position)
+        val item: FoundUser? = mItemList?.get(position)
         with(viewHolder) {
-            content.text = item?.content
-            likesCount.text = item?.likes.toString()
-            author.text = item?.author.toString()
-            likeButton.setOnClickListener {
-                if (item?.likedByUser == false) {
-                    likesCount.text = (likesCount.text.toString().toInt() + 1).toString()
-                    it.setBackgroundColor(this@CommentRecyclerViewAdapter.ctx.getColor(R.color.purple_500))
-                    item.likedByUser = true
-                } else {
-                    likesCount.text = (likesCount.text.toString().toInt() - 1).toString()
-                    it.setBackgroundColor(this@CommentRecyclerViewAdapter.ctx.getColor(R.color.purple_light))
-                    item?.likedByUser = false
-                }
-                val executor = Executors.newSingleThreadExecutor()
-                val handler = Handler(Looper.getMainLooper())
-                executor.execute {
-                    Util.executeRequest(ctx, "/posts/${item?.id}/like", Util.METHOD.POST, null)
-                    handler.post {
-                        //todo increment likes
-                    }
-                }
+            name.text = item?.toString()
+            pic.setOnClickListener {
+                getProfileDetails(item?.id)
+            }
+            name.setOnClickListener {
+                getProfileDetails(item?.id)
             }
         }
     }
 
+    private fun getProfileDetails(id: Long?) {
+        navController.navigate(R.id.action_feedFragment_to_searchFragment)
+    }
 }
