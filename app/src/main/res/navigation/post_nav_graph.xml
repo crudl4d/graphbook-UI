@@ -65,5 +65,14 @@
         android:id="@+id/searchFragment"
         android:name="com.dogebook.feed.fragments.search.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_readProfileFragment"
+            app:destination="@id/readProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/readProfileFragment"
+        android:name="com.dogebook.feed.fragments.profile.read.ReadProfileFragment"
+        android:label="fragment_read_profile"
+        tools:layout="@layout/fragment_read_profile" />
 </navigation>

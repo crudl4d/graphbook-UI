@@ -23,7 +23,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
-    private val toHideTabs = listOf(R.id.postFragment, R.id.comments, R.id.editProfileFragment, R.id.searchFragment)
+    private val toHideTabs = listOf(R.id.postFragment, R.id.comments, R.id.editProfileFragment,
+        R.id.searchFragment, R.id.readProfileFragment)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

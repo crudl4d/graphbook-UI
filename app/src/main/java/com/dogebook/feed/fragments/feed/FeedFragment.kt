@@ -92,7 +92,7 @@ class FeedFragment : Fragment() {
                     Util.METHOD.GET,
                     null
                 )
-                val posts = Gson().fromJson(response.body?.string(), Array<Post>::class.java)
+                val posts = Gson().fromJson(response.body.string(), Array<Post>::class.java)
                 handler.post {
                     feedViewModel.page++
                     for (post in posts) {
@@ -100,7 +100,7 @@ class FeedFragment : Fragment() {
                             ral.add(post)
                         })
                     }
-                    recyclerViewAdapter?.notifyDataSetChanged()
+                    recyclerViewAdapter?.notifyItemRangeInserted(feedViewModel.page * 10, 10)
                 }
             }
             isLoading = false

@@ -38,13 +38,15 @@ class SearchFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.searchButton.setOnClickListener {
-//            loadingPB = view.findViewById(R.id.progressBar)
-//            loadingPB.visibility = View.VISIBLE
-            fillFoundUsers()
-//            loadingPB.visibility = View.GONE
-        }
         super.onViewCreated(view, savedInstanceState)
+        loadingPB = requireView().findViewById<ProgressBar?>(R.id.progressBar)
+        binding.searchButton.setOnClickListener {
+            loadingPB.visibility = View.VISIBLE
+            recyclerViewAdapter?.notifyItemRangeRemoved(0, rowsArrayList.size)
+            rowsArrayList.clear()
+            fillFoundUsers()
+            loadingPB.visibility = View.GONE
+        }
     }
 
     private fun fillFoundUsers() {
@@ -56,7 +58,6 @@ class SearchFragment : Fragment() {
             handler.post {
                 users.forEach { rowsArrayList.add(it) }
                 initAdapter()
-//                loadingPB.visibility = View.GONE
             }
         }
     }

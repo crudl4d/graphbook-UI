@@ -2,6 +2,7 @@ package com.dogebook.feed.fragments.search
 
 
 import android.content.Context
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
@@ -89,6 +90,9 @@ class UsersRecyclerViewAdapter(
     }
 
     private fun getProfileDetails(id: Long?) {
-        navController.navigate(R.id.action_feedFragment_to_searchFragment)
+        with(Bundle()) {
+            putLong("userId", id ?: -1)
+            navController.navigate(R.id.action_searchFragment_to_readProfileFragment, this@with)
+        }
     }
 }
