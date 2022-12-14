@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.dogebook.R
 import com.dogebook.Util
 import com.dogebook.databinding.FragmentEditProfileBinding
@@ -49,6 +50,7 @@ class EditProfileFragment : Fragment() {
                         Gson().toJson(user).toRequestBody("application/json".toMediaTypeOrNull()))
                 }
             }
+            findNavController().popBackStack()
         }
     }
 

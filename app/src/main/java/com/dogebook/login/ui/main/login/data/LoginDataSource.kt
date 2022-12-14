@@ -24,7 +24,8 @@ class LoginDataSource {
             val response: Response = call.execute()
             if (!response.isSuccessful) return Result.Error(IOException("Error logging in"))
             val user = LoggedInUser(
-                response.header("id") ?: "id", response.header("name") ?: "name"
+                response.header("id") ?: "id", response.header("name") ?: "name",
+                response.header("role") ?: "role"
             )
             return Result.Success(user)
         } catch (e: Throwable) {

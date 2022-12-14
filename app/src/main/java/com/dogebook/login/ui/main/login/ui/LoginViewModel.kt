@@ -26,13 +26,15 @@ class LoginViewModel(val loginRepository: LoginRepository) : ViewModel() {
     fun login(username: String, password: String, ctx: Context) {
         val credentials = okhttp3.Credentials.basic(username, password)
         val sharedPref = ctx.getSharedPreferences(R.string.preferences.toString(), Context.MODE_PRIVATE) ?: return
-        with(sharedPref.edit()) {
-            putString("TOKEN", credentials)
-        }.commit()
-        var result: Result<LoggedInUser>? = Result.Success(LoggedInUser("",""))
+
+        var result: Result<LoggedInUser>? = Result.Success(LoggedInUser("","", ""))
         viewModelScope.launch(Dispatchers.IO) {
             result = loginRepository.login(credentials)
             if (result is Result.Success) {
+                with(sharedPref.edit()) {
+                    putString("TOKEN", credentials)
+                    putString("ROLE", (result as Result.Success<LoggedInUser>).data.role)
+                }.commit()
                 _loginResult.postValue(
                     LoginResult(success = LoggedInUserView(displayName = (result as Result.Success<LoggedInUser>).data.displayName)))
             } else {

@@ -50,6 +50,9 @@
         <action
             android:id="@+id/action_profileFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_myPostsFragment"
+            app:destination="@id/myPostsFragment" />
     </fragment>
     <fragment
         android:id="@+id/commentsFragment"
@@ -75,4 +78,12 @@
         android:name="com.dogebook.feed.fragments.profile.read.ReadProfileFragment"
         android:label="fragment_read_profile"
         tools:layout="@layout/fragment_read_profile" />
+    <fragment
+        android:id="@+id/myPostsFragment"
+        android:name="com.dogebook.feed.fragments.profile.posts.MyPostsFragment"
+        android:label="MyPostsFragment" >
+        <action
+            android:id="@+id/action_myPostsFragment_to_commentsFragment"
+            app:destination="@id/commentsFragment" />
+    </fragment>
 </navigation>

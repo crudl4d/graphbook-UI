@@ -49,6 +49,7 @@ class Util : Application() {
                 METHOD.POST -> requestBuilder.post(body)
                 METHOD.PATCH -> requestBuilder.patch(body)
                 METHOD.PUT -> requestBuilder.put(body)
+                METHOD.DELETE -> requestBuilder.delete(body)
             }
             val client = OkHttpClient.Builder()
                 .connectTimeout(20, TimeUnit.SECONDS)
@@ -70,7 +71,8 @@ class Util : Application() {
         GET,
         POST,
         PATCH,
-        PUT;
+        PUT,
+        DELETE;
     }
 
     override fun onCreate() {

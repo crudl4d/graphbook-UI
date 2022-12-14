@@ -60,8 +60,16 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.editProfile.visibility = View.GONE
+        binding.profilePicture.visibility = View.GONE
+        binding.button.visibility = View.GONE
+        binding.name.visibility = View.GONE
+        binding.birthDate.visibility = View.GONE
         binding.editProfile.setOnClickListener {
             findNavController().navigate(R.id.action_profileFragment_to_editProfileFragment)
+        }
+        binding.myPosts.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_myPostsFragment)
         }
         binding.button.setOnClickListener {
             getImageFromGallery.launch(Intent().apply {
@@ -98,6 +106,11 @@ class ProfileFragment : Fragment() {
                 LocalDateTime.parse(user.birthDate, DateTimeFormatter.ISO_ZONED_DATE_TIME)
                     .format(DateTimeFormatter.ISO_LOCAL_DATE)
             loadingPB.visibility = View.GONE
+            binding.editProfile.visibility = View.VISIBLE
+            binding.profilePicture.visibility = View.VISIBLE
+            binding.button.visibility = View.VISIBLE
+            binding.name.visibility = View.VISIBLE
+            binding.birthDate.visibility = View.VISIBLE
         }
     }
 

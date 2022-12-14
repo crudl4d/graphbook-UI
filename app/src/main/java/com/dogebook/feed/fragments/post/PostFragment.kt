@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.dogebook.Util
 import com.dogebook.databinding.FragmentPostBinding
 import com.google.gson.Gson
@@ -41,6 +42,7 @@ class PostFragment : Fragment() {
                     )
                 }
             }
+            findNavController().popBackStack()
         }
         super.onViewCreated(view, savedInstanceState)
     }
