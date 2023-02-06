@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
@@ -37,6 +38,14 @@ class ReadProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.rpInviteFriend.setOnClickListener {
+            lifecycleScope.launch {
+                withContext(Dispatchers.IO) {
+                    Util.executeRequest(context, "/friends?userId=${arguments?.getLong("userId")}", Util.METHOD.POST, null)
+                }
+                Toast.makeText(context, "Request sent", Toast.LENGTH_LONG).show()
+            }
+        }
         populateData()
     }
 

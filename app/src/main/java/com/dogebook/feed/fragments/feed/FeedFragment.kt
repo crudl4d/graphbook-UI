@@ -54,7 +54,7 @@ class FeedFragment : Fragment() {
     private fun initAdapter() {
         loadingPB = requireView().findViewById(R.id.progressBar)
         loadingPB.visibility = View.VISIBLE
-        recyclerView = view?.findViewById(R.id.recyclerView)
+        recyclerView = view?.findViewById(R.id.requests)
         feedViewModel.rowsArrayList.observe(viewLifecycleOwner, Observer { ral ->
             recyclerViewAdapter = context?.let { RecyclerViewAdapter(ral, it, findNavController()) }
             recyclerView?.adapter = recyclerViewAdapter

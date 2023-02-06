@@ -19,7 +19,7 @@
         app:srcCompat="@android:mipmap/sym_def_app_icon" />
 
     <Button
-        android:id="@+id/rp_button"
+        android:id="@+id/rp_invite_friend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -50,22 +50,5 @@
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/profile_picture" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/edit_profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_edit" />
-
-    <include
-        android:id="@+id/include"
-        layout="@layout/progress_bar"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="160dp" />
 
 </LinearLayout>

@@ -7,20 +7,34 @@
     android:orientation="vertical"
     tools:context=".feed.fragments.feed.comments.CommentsFragment">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/commentContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:ems="10"
+            android:hint="Write comment"
+            android:inputType="text"
+            android:paddingBottom="10dp"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/writeComment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.7"
+            android:text="Add" />
+    </LinearLayout>
+
     <include layout="@layout/progress_bar" />
 
-    <EditText
-        android:id="@+id/editTextTextPersonName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Write comment"
-        android:inputType="text"
-        android:paddingBottom="10dp"
-        android:textSize="20sp" />
-
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/requests"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="visible"

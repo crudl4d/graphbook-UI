@@ -77,6 +77,12 @@ class ProfileFragment : Fragment() {
                 action = Intent.ACTION_GET_CONTENT
             })
         }
+        binding.friendRequests.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_friendRequestFragment)
+        }
+        binding.friendList.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_friendListFragment)
+        }
         loadingPB = requireView().findViewById<ProgressBar?>(R.id.progressBar)
             .apply { visibility = View.VISIBLE }
         populateData()

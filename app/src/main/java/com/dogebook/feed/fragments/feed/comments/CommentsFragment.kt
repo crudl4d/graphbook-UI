@@ -8,17 +8,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dogebook.R
 import com.dogebook.Util
 import com.dogebook.databinding.FragmentCommentsBinding
+import com.dogebook.feed.fragments.feed.Author
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.util.concurrent.Executors
 
-/**
- * A fragment representing a list of Items.
- */
 class CommentsFragment : Fragment() {
 
     private var _binding: FragmentCommentsBinding? = null
@@ -48,6 +52,22 @@ class CommentsFragment : Fragment() {
         arguments?.getLong("postId")?.let { postId = it }
         loadingPB = requireView().findViewById(R.id.progressBar)
         loadingPB.visibility = View.VISIBLE
+        binding.writeComment.setOnClickListener {
+            lifecycleScope.launch {
+                val comment = Comment(binding.commentContent.text.toString())
+                withContext(Dispatchers.Default) {
+                    Util.executeRequest(
+                        context,
+                        "/posts/${postId}/comments",
+                        Util.METHOD.POST,
+                        Gson().toJson(comment).toRequestBody("application/json".toMediaTypeOrNull())
+                    )
+                }
+                comment.author = Author(0L, "You", "")
+                rowsArrayList.add(0, comment)
+                recyclerViewAdapter?.notifyItemInserted(0)
+            }
+        }
         populateData()
     }
 
@@ -59,7 +79,7 @@ class CommentsFragment : Fragment() {
         val executor = Executors.newSingleThreadExecutor()
         val handler = Handler(Looper.getMainLooper())
         executor.execute {
-            val response = Util.executeRequest(requireContext(), "/posts/$postId/comments?page=0", Util.METHOD.GET, null)
+            val response = Util.executeRequest(requireContext(), "/posts/$postId/comments", Util.METHOD.GET, null)
             val comments = Util.gson.fromJson(response.body.string(), Array<Comment>::class.java)
             page++
             handler.post {
@@ -73,7 +93,7 @@ class CommentsFragment : Fragment() {
 
     private fun initAdapter() {
         recyclerViewAdapter = context?.let { CommentRecyclerViewAdapter(it, rowsArrayList) }
-        recyclerView = binding.recyclerView.apply { adapter = recyclerViewAdapter }
+        recyclerView = binding.requests.apply { adapter = recyclerViewAdapter }
     }
 
     private fun initScrollListener() {

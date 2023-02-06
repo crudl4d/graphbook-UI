@@ -8,7 +8,7 @@ data class Post(
     val content: String,
     val author: Author?,
     val likes: Long?,
-    val created: LocalDateTime,
+//    val created: LocalDateTime,
     var authorPicture: Bitmap?,
 
     var likedByUser: Boolean = false

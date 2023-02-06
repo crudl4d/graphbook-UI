@@ -1,8 +1,7 @@
-package com.dogebook.feed.fragments.feed
+package com.dogebook.feed.fragments.friends.requests
 
 import android.content.Context
 import android.graphics.BitmapFactory
-import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
@@ -12,6 +11,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import com.dogebook.R
@@ -20,7 +20,7 @@ import java.util.concurrent.Executors
 
 
 class RecyclerViewAdapter(
-    private val mItemList: List<Post?>?,
+    private val mItemList: List<Request?>?,
     private val ctx: Context,
     private val navController: NavController
 ) :
@@ -32,7 +32,7 @@ class RecyclerViewAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == VIEW_TYPE_ITEM) {
             val view: View =
-                LayoutInflater.from(parent.context).inflate(R.layout.post_row, parent, false)
+                LayoutInflater.from(parent.context).inflate(R.layout.friend_request_row, parent, false)
             ItemViewHolder(view)
         } else {
             val view: View =
@@ -58,19 +58,15 @@ class RecyclerViewAdapter(
     }
 
     private inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var postContent: TextView
-        var likeButton: Button
-        var commentButton: Button
-        var likesCount: TextView
-        var author: TextView
+        var name: TextView
+        var accept: Button
+        var reject: Button
         var picture: ImageView
 
         init {
-            postContent = itemView.findViewById(R.id.request_name)
-            likeButton = itemView.findViewById(R.id.accept)
-            commentButton = itemView.findViewById(R.id.remove)
-            likesCount = itemView.findViewById(R.id.likeCount)
-            author = itemView.findViewById(R.id.author)
+            name = itemView.findViewById(R.id.request_name)
+            accept = itemView.findViewById(R.id.accept)
+            reject = itemView.findViewById(R.id.remove)
             picture = itemView.findViewById(R.id.request_picture)
         }
     }
@@ -88,34 +84,23 @@ class RecyclerViewAdapter(
     }
 
     private fun populateItemRows(viewHolder: ItemViewHolder, position: Int) {
-        val item: Post? = mItemList?.get(position)
+        val item: Request? = mItemList?.get(position)
         with(viewHolder) {
-            postContent.text = item?.content
-            likesCount.text = item?.likes.toString()
-            author.text = item?.author.toString()
-            likeButton.setOnClickListener {
-                if (item?.likedByUser == false) {
-                    likesCount.text = (likesCount.text.toString().toInt() + 1).toString()
-                    it.setBackgroundColor(this@RecyclerViewAdapter.ctx.getColor(R.color.purple_500))
-                    item.likedByUser = true
-                } else {
-                    likesCount.text = (viewHolder.likesCount.text.toString().toInt() - 1).toString()
-                    it.setBackgroundColor(this@RecyclerViewAdapter.ctx.getColor(R.color.purple_light))
-                    item?.likedByUser = false
-                }
-                val executor = Executors.newSingleThreadExecutor()
-                val handler = Handler(Looper.getMainLooper())
+            name.text = "${item?.firstName} ${item?.surname}"
+            val executor = Executors.newSingleThreadExecutor()
+            val handler = Handler(Looper.getMainLooper())
+            accept.setOnClickListener {
                 executor.execute {
-                    Util.executeRequest(ctx, "/posts/${item?.id}/like", Util.METHOD.POST, null)
+                    Util.executeRequest(ctx, "/friends/${item?.id}/accept", Util.METHOD.POST, null)
                     handler.post {
-                        //todo increment likes
+                        Toast.makeText(ctx, "Friend request accepted", Toast.LENGTH_LONG).show()
                     }
                 }
             }
-            commentButton.setOnClickListener {
-                with(Bundle()) {
-                    putLong("postId", item?.id ?: -1)
-                    navController.navigate(R.id.action_feedFragment_to_commentsFragment, this)
+            executor.execute {
+                Util.executeRequest(ctx, "/friends/requests-received", Util.METHOD.POST, null)
+                handler.post {
+                    //todo increment likes
                 }
             }
             if (item?.authorPicture != null) picture.setImageBitmap(item.authorPicture)

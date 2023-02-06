@@ -53,21 +53,27 @@
         <action
             android:id="@+id/action_profileFragment_to_myPostsFragment"
             app:destination="@id/myPostsFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_friendRequestFragment"
+            app:destination="@id/friendRequestFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_friendListFragment"
+            app:destination="@id/friendListFragment" />
     </fragment>
     <fragment
         android:id="@+id/commentsFragment"
         android:name="com.dogebook.feed.fragments.feed.comments.CommentsFragment"
-        android:label="fragment_comments_list"
+        android:label="Comments list"
         tools:layout="@layout/fragment_comments" />
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="com.dogebook.feed.fragments.profile.edit.EditProfileFragment"
-        android:label="fragment_edit_profile"
+        android:label="Edit profile"
         tools:layout="@layout/fragment_edit_profile" />
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.dogebook.feed.fragments.search.SearchFragment"
-        android:label="fragment_search"
+        android:label="Search"
         tools:layout="@layout/fragment_search" >
         <action
             android:id="@+id/action_searchFragment_to_readProfileFragment"
@@ -76,14 +82,24 @@
     <fragment
         android:id="@+id/readProfileFragment"
         android:name="com.dogebook.feed.fragments.profile.read.ReadProfileFragment"
-        android:label="fragment_read_profile"
+        android:label="Profile"
         tools:layout="@layout/fragment_read_profile" />
     <fragment
         android:id="@+id/myPostsFragment"
         android:name="com.dogebook.feed.fragments.profile.posts.MyPostsFragment"
-        android:label="MyPostsFragment" >
+        android:label="My posts" >
         <action
             android:id="@+id/action_myPostsFragment_to_commentsFragment"
             app:destination="@id/commentsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/friendRequestFragment"
+        android:name="com.dogebook.feed.fragments.friends.requests.FriendRequestFragment"
+        android:label="fragment_friend_requests"
+        tools:layout="@layout/fragment_friend_requests" />
+    <fragment
+        android:id="@+id/friendListFragment"
+        android:name="com.dogebook.feed.fragments.friends.list.FriendListFragment"
+        android:label="fragment_friend_list"
+        tools:layout="@layout/fragment_friend_list" />
 </navigation>

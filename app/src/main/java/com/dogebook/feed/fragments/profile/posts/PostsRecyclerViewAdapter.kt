@@ -2,7 +2,6 @@ package com.dogebook.feed.fragments.profile.posts
 
 import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -66,12 +65,12 @@ class PostsRecyclerViewAdapter(
         var picture: ImageView
 
         init {
-            postContent = itemView.findViewById(R.id.post_content)
-            likeButton = itemView.findViewById(R.id.like_button)
-            commentButton = itemView.findViewById(R.id.comments)
+            postContent = itemView.findViewById(R.id.request_name)
+            likeButton = itemView.findViewById(R.id.accept)
+            commentButton = itemView.findViewById(R.id.remove)
             likesCount = itemView.findViewById(R.id.likeCount)
             author = itemView.findViewById(R.id.author)
-            picture = itemView.findViewById(R.id.post_author_picture)
+            picture = itemView.findViewById(R.id.request_picture)
         }
     }
 
