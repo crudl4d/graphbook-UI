@@ -35,6 +35,7 @@
             android:id="@+id/profile_picture"
             android:layout_width="388dp"
             android:layout_height="238dp"
+            android:layout_gravity="center"
             android:layout_marginTop="5dp"
             android:contentDescription="@string/profile_picture"
             app:srcCompat="@android:mipmap/sym_def_app_icon" />
@@ -46,6 +47,14 @@
 
             android:layout_gravity="center"
             android:textSize="34sp" />
+
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_gravity="center"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/birth_date"

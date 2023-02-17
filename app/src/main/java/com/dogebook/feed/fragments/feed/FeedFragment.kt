@@ -52,7 +52,7 @@ class FeedFragment : Fragment() {
             findNavController().navigate(R.id.action_feedFragment_to_searchFragment)
         }
         binding.refresh.setOnClickListener {
-            feedViewModel.refreshPosts()
+            feedViewModel.refreshPosts(binding.feedProgressBar)
         }
     }
 

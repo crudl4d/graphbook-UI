@@ -2,11 +2,16 @@ package com.dogebook.feed.fragments.feed
 
 import android.app.Application
 import android.graphics.BitmapFactory
+import android.os.Handler
+import android.os.Looper
+import android.view.View
+import android.widget.ProgressBar
 import androidx.lifecycle.*
 import com.dogebook.Util
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 
 class FeedViewModel(app: Application) : AndroidViewModel(app) {
 
@@ -21,10 +26,10 @@ class FeedViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     private fun populateData() {
-        fetchPosts()
+        fetchPosts(null)
     }
 
-    private fun fetchPosts() {
+    private fun fetchPosts(pb: ProgressBar?) {
         val ral = arrayListOf<Post?>()
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -36,15 +41,19 @@ class FeedViewModel(app: Application) : AndroidViewModel(app) {
                     post.authorPicture = BitmapFactory.decodeStream(authorPicture)
                     ral.add(post)
                 }
+                if (pb != null) {
+                    Handler(Looper.getMainLooper()).post { pb.visibility = View.GONE }
+                }
             }
             page++
             _rowsArrayList.value = ral
         }
     }
 
-    fun refreshPosts() {
+    fun refreshPosts(pb: ProgressBar) {
+        pb.visibility = View.VISIBLE
         rowsArrayList.value?.clear()
         _rowsArrayList.value = rowsArrayList.value
-        fetchPosts()
+        fetchPosts(pb)
     }
 }

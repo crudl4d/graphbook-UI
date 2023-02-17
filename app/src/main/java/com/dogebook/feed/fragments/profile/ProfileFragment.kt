@@ -108,6 +108,7 @@ class ProfileFragment : Fragment() {
                 binding.profilePicture.setImageBitmap(profilePicture)
             }
             binding.name.text = user.toString()
+            binding.email.text = user.email
             binding.birthDate.text =
                 LocalDateTime.parse(user.birthDate, DateTimeFormatter.ISO_ZONED_DATE_TIME)
                     .format(DateTimeFormatter.ISO_LOCAL_DATE)
