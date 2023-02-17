@@ -8,10 +8,16 @@
     tools:context=".feed.fragments.profile.read.ReadProfileFragment">
 
 
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="10dp" />
+
     <ImageView
         android:id="@+id/rp_profile_picture"
         android:layout_width="388dp"
         android:layout_height="238dp"
+        android:layout_gravity="center"
         android:contentDescription="@string/profile_picture"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

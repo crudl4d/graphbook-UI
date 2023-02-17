@@ -70,6 +70,9 @@ class MyPostsFragment : Fragment() {
 
 
     override fun onDestroyView() {
+        val size = rowsArrayList.size
+        rowsArrayList.clear()
+        recyclerViewAdapter?.notifyItemRangeRemoved(0, size)
         super.onDestroyView()
         _binding = null
     }

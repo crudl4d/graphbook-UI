@@ -52,7 +52,8 @@ class ReadProfileFragment : Fragment() {
     private fun populateData() {
         arguments?.getLong("userId")?.let { userId = it }
         lifecycleScope.launch {
-            var profilePicResponse: Response
+            var profilePic: Bitmap
+            val isProfilePicRequestSuccessful: Boolean
             var user: User
             withContext(Dispatchers.IO) {
                 user = Gson().fromJson(
@@ -60,16 +61,18 @@ class ReadProfileFragment : Fragment() {
                         context, "/users/${arguments?.getLong("userId")}", Util.METHOD.GET, null
                     ).body.string(), User::class.java
                 )
-                profilePicResponse = Util.executeRequest(
+                val profilePicResponse = Util.executeRequest(
                     requireContext(),"/users/${arguments?.getLong("userId")}/profile-picture?isThumbnail=false", Util.METHOD.GET, null
                 )
+                profilePic = BitmapFactory.decodeStream(profilePicResponse.body.byteStream())
+                isProfilePicRequestSuccessful = profilePicResponse.isSuccessful
             }
             binding.rpName.text = user.toString()
             binding.rpBirthDate.text =
                 LocalDateTime.parse(user.birthDate, DateTimeFormatter.ISO_ZONED_DATE_TIME)
                     .format(DateTimeFormatter.ISO_LOCAL_DATE)
-            if (profilePicResponse.isSuccessful) {
-                binding.rpProfilePicture.setImageBitmap(BitmapFactory.decodeStream(profilePicResponse.body.byteStream()))
+            if (isProfilePicRequestSuccessful) {
+                binding.rpProfilePicture.setImageBitmap(profilePic)
             }
         }
     }
