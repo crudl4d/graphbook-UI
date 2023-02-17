@@ -33,7 +33,7 @@ class PostFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.post.setOnClickListener {
-            val post = Post(binding.editTextTextMultiLine.text.toString())
+            val post = Post(binding.editTextTextMultiLine.text.toString(), getVisibility())
             lifecycleScope.launch {
                 withContext(Dispatchers.Default) {
                     Util.executeRequest(
@@ -45,5 +45,10 @@ class PostFragment : Fragment() {
             findNavController().popBackStack()
         }
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun getVisibility(): String {
+        return if (binding.visibilityPrivate.isChecked) Post.Visibility.FRIENDS.name
+        else Post.Visibility.PUBLIC.name
     }
 }

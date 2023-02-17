@@ -7,6 +7,34 @@
     android:layout_height="match_parent"
     tools:context=".feed.fragments.post.PostFragment">
 
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView_visibility"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Post visibility:" />
+
+        <RadioButton
+            android:id="@+id/visibility_public"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Public" />
+
+        <RadioButton
+            android:id="@+id/visibility_private"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Private (for friends)" />
+    </RadioGroup>
+
     <EditText
         android:id="@+id/editTextTextMultiLine"
         android:layout_width="match_parent"
