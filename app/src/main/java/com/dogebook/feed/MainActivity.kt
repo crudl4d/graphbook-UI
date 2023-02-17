@@ -14,6 +14,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.dogebook.ExceptionHandler
 import com.dogebook.R
 import com.dogebook.databinding.ActivityMainBinding
+import com.dogebook.login.InitialActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
@@ -24,7 +25,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
     private val toHideTabs = listOf(R.id.postFragment, R.id.remove, R.id.editProfileFragment,
-        R.id.searchFragment, R.id.readProfileFragment)
+        R.id.searchFragment, R.id.readProfileFragment, R.id.friendListFragment,
+        R.id.friendRequestFragment, R.id.myPostsFragment)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +63,7 @@ class MainActivity : AppCompatActivity() {
         fab.setOnClickListener {
             applicationContext.getSharedPreferences(R.string.preferences.toString(), Context.MODE_PRIVATE)
                 .edit().remove("TOKEN").apply()
-            startActivity(Intent(applicationContext, MainActivity::class.java))
+            startActivity(Intent(applicationContext, InitialActivity::class.java))
         }
     }
 
@@ -81,7 +83,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun hideTabs() {
+    private fun hideTabs() {
         binding.tabs.isVisible = false
     }
     private fun showTabs() {

@@ -41,4 +41,10 @@ class FeedViewModel(app: Application) : AndroidViewModel(app) {
             _rowsArrayList.value = ral
         }
     }
+
+    fun refreshPosts() {
+        rowsArrayList.value?.clear()
+        _rowsArrayList.value = rowsArrayList.value
+        fetchPosts()
+    }
 }

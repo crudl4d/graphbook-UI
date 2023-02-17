@@ -1,5 +1,6 @@
 package com.dogebook.feed.fragments.feed
 
+import android.opengl.Visibility
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -40,6 +41,8 @@ class FeedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.refresh.isEnabled = false
+        binding.refresh.visibility = View.GONE
         feedViewModel = ViewModelProvider(this)[FeedViewModel::class.java]
         initAdapter()
         binding.writePost.setOnClickListener {
@@ -47,6 +50,9 @@ class FeedFragment : Fragment() {
         }
         binding.search.setOnClickListener {
             findNavController().navigate(R.id.action_feedFragment_to_searchFragment)
+        }
+        binding.refresh.setOnClickListener {
+            feedViewModel.refreshPosts()
         }
     }
 
@@ -78,6 +84,8 @@ class FeedFragment : Fragment() {
             }
         })
         loadingPB.visibility = View.GONE
+        binding.refresh.visibility = View.VISIBLE
+        binding.refresh.isEnabled = true
     }
 
     private fun loadMore() {

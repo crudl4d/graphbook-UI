@@ -95,11 +95,11 @@
     <fragment
         android:id="@+id/friendRequestFragment"
         android:name="com.dogebook.feed.fragments.friends.requests.FriendRequestFragment"
-        android:label="fragment_friend_requests"
+        android:label="Friend Requests"
         tools:layout="@layout/fragment_friend_requests" />
     <fragment
         android:id="@+id/friendListFragment"
         android:name="com.dogebook.feed.fragments.friends.list.FriendListFragment"
-        android:label="fragment_friend_list"
+        android:label="Friends List"
         tools:layout="@layout/fragment_friend_list" />
 </navigation>
