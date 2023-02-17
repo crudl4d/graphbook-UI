@@ -29,7 +29,8 @@
             android:id="@+id/my_posts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="View your posts" />
+            android:text="View your posts"
+            android:visibility="invisible" />
 
         <ImageView
             android:id="@+id/profile_picture"
@@ -82,7 +83,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Friend requests" />
+                android:text="Friend requests"
+                android:visibility="invisible" />
 
             <Space
                 android:layout_width="wrap_content"
@@ -94,7 +96,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Friends list" />
+                android:text="Friends list"
+                android:visibility="invisible" />
         </LinearLayout>
 
     </LinearLayout>
