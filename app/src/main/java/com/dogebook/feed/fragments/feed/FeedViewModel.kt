@@ -16,7 +16,7 @@ import kotlinx.coroutines.withContext
 class FeedViewModel(app: Application) : AndroidViewModel(app) {
 
     private val _rowsArrayList = MutableLiveData<ArrayList<Post?>>()
-    val rowsArrayList: LiveData<ArrayList<Post?>> = _rowsArrayList
+    var rowsArrayList: LiveData<ArrayList<Post?>> = _rowsArrayList
 
     private val context = getApplication<Application>().applicationContext
     var page = 0
@@ -26,18 +26,27 @@ class FeedViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     private fun populateData() {
-        fetchPosts(null)
+        fetchPosts(null, true)
     }
 
-    private fun fetchPosts(pb: ProgressBar?) {
+    private fun fetchPosts(pb: ProgressBar?, isPublic: Boolean) {
         val ral = arrayListOf<Post?>()
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val response = Util.executeRequest(context, "/posts?page=0", Util.METHOD.GET, null)
+                val response = Util.executeRequest(
+                    context,
+                    if (isPublic) "/posts?page=0"
+                    else "/posts/friends?page=0",
+                    Util.METHOD.GET,
+                    null)
                 val posts = Util.gson.fromJson(response.body.string(), Array<Post>::class.java)
                 for (post in posts) {
-                    val authorPicture = Util
-                        .executeRequest(context, "/users/${post.author?.id}/profile-picture", Util.METHOD.GET, null).body?.byteStream()
+                    val authorPicture = Util.executeRequest(
+                        context,
+                        "/users/${post.author?.id}/profile-picture",
+                        Util.METHOD.GET,
+                        null
+                    ).body.byteStream()
                     post.authorPicture = BitmapFactory.decodeStream(authorPicture)
                     ral.add(post)
                 }
@@ -51,9 +60,19 @@ class FeedViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun refreshPosts(pb: ProgressBar) {
+        clearPosts(pb)
+        fetchPosts(pb, true)
+    }
+
+    fun fetchFriendsPosts(pb: ProgressBar) {
+        clearPosts(pb)
+        fetchPosts(pb, false)
+    }
+
+    private fun clearPosts(pb: ProgressBar) {
         pb.visibility = View.VISIBLE
-        rowsArrayList.value?.clear()
-        _rowsArrayList.value = rowsArrayList.value
-        fetchPosts(pb)
+        _rowsArrayList.value = arrayListOf()
+        rowsArrayList = _rowsArrayList
+        page = 0
     }
 }

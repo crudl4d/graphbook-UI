@@ -1,12 +1,12 @@
 package com.dogebook.feed.fragments.feed
 
-import android.opengl.Visibility
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.*
 import androidx.navigation.fragment.findNavController
@@ -16,6 +16,7 @@ import com.dogebook.R
 import com.dogebook.Util
 import com.dogebook.databinding.FragmentFeedBinding
 import com.google.gson.*
+import kotlinx.coroutines.flow.combine
 import java.util.concurrent.Executors
 
 
@@ -51,8 +52,20 @@ class FeedFragment : Fragment() {
         binding.search.setOnClickListener {
             findNavController().navigate(R.id.action_feedFragment_to_searchFragment)
         }
+        val pb = binding.feedProgressBar
         binding.refresh.setOnClickListener {
-            feedViewModel.refreshPosts(binding.feedProgressBar)
+            if (binding.toggleVisibility.isChecked) feedViewModel.fetchFriendsPosts(pb)
+            else feedViewModel.refreshPosts(pb)
+        }
+        binding.toggleVisibility.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                // fetch friends posts
+                feedViewModel.fetchFriendsPosts(pb)
+            } else {
+                //fetch public posts
+                feedViewModel.refreshPosts(pb)
+            }
+            recyclerViewAdapter?.notifyDataSetChanged()
         }
     }
 
@@ -60,7 +73,7 @@ class FeedFragment : Fragment() {
     private fun initAdapter() {
         loadingPB = requireView().findViewById(R.id.progressBar)
         loadingPB.visibility = View.VISIBLE
-        recyclerView = view?.findViewById(R.id.requests)
+        recyclerView = binding.requests
         feedViewModel.rowsArrayList.observe(viewLifecycleOwner, Observer { ral ->
             recyclerViewAdapter = context?.let { RecyclerViewAdapter(ral, it, findNavController()) }
             recyclerView?.adapter = recyclerViewAdapter
@@ -83,20 +96,18 @@ class FeedFragment : Fragment() {
                 }
             }
         })
-        loadingPB.visibility = View.GONE
-        binding.refresh.visibility = View.VISIBLE
-        binding.refresh.isEnabled = true
+        showButtons()
     }
 
     private fun loadMore() {
-
         recyclerView?.post {
             val executor = Executors.newSingleThreadExecutor()
             val handler = Handler()
             executor.execute {
                 val response = Util.executeRequest(
                     context,
-                    "/posts?page=${feedViewModel.page}",
+                    if (binding.toggleVisibility.isChecked) "/posts/friends?page=${feedViewModel.page}"
+                    else "/posts?page=${feedViewModel.page}",
                     Util.METHOD.GET,
                     null
                 )
@@ -104,15 +115,21 @@ class FeedFragment : Fragment() {
                 handler.post {
                     feedViewModel.page++
                     for (post in posts) {
-                        feedViewModel.rowsArrayList.observe(viewLifecycleOwner, Observer { ral ->
-                            ral.add(post)
-                        })
+                        feedViewModel.rowsArrayList.value?.add(post)
                     }
-                    recyclerViewAdapter?.notifyItemRangeInserted(feedViewModel.page * 10, 10)
+                    recyclerViewAdapter?.notifyItemRangeInserted(feedViewModel.page * 10, posts.size)
                 }
             }
             isLoading = false
         }
+    }
+
+    private fun showButtons() {
+        loadingPB.visibility = View.GONE
+        binding.refresh.visibility = View.VISIBLE
+        binding.writePost.visibility = View.VISIBLE
+        binding.toggleVisibility.visibility = View.VISIBLE
+        binding.refresh.isEnabled = true
     }
 
     override fun onDestroyView() {
